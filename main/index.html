@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comfy Clouds</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { 
             --sky-blue: #64b5f6;
@@ -106,7 +107,7 @@
             box-shadow: 0 8px 20px rgba(100, 181, 246, 0.15);
         }
 
-        .filter-nav { display: flex; justify: center; gap: 15px; flex-wrap: wrap; justify-content: center; }
+        .filter-nav { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
         .dropdown { position: relative; display: inline-block; }
         
         .dropbtn, .filter-tab {
@@ -130,18 +131,10 @@
             box-shadow: 0px 8px 16px rgba(0,0,0,0.1);
             border-radius: 15px; 
             z-index: 10; 
-            top: 38px;
+            top: 40px; 
             left: 50%;
             transform: translateX(-50%); 
-        }
-
-        .dropdown-content::before {
-            content: "";
-            position: absolute;
-            top: -20px; 
-            left: 0; right: 0;
-            height: 25px;
-            background: transparent;
+            overflow: hidden;
         }
 
         .dropdown-content a {
@@ -152,59 +145,227 @@
             font-size: 0.8rem; 
             font-weight: 600; 
             text-align: center;
+            transition: 0.2s;
         }
 
         .dropdown-content a:hover { background-color: var(--sky-blue); color: white; }
-        .dropdown:hover .dropdown-content { display: block; }
+        .dropdown.show .dropdown-content { display: block; }
+        
+        @media (min-width: 1025px) {
+            .dropdown:hover .dropdown-content { display: block; }
+        }
+
+        .scroller-container {
+            max-width: 1250px;
+            margin: 40px auto;
+            position: relative;
+            padding: 0 15px;
+        }
+        .scroller-header {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-left: 10px;
+        }
+        .horizontal-scroller {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding-bottom: 20px;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+        }
+        .horizontal-scroller::-webkit-scrollbar { display: none; }
+        .scroller-card { flex: 0 0 350px; }
+        
+        .scroll-arrow {
+            position: absolute;
+            top: 55%;
+            transform: translateY(-50%);
+            background: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            z-index: 5;
+            color: var(--sky-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .arrow-left { left: 0; }
+        .arrow-right { right: 0; }
+
+        /* --- UPDATED VIDEO BANNER SECTION (BIGGER & WIDER) --- */
+        .video-banner-container {
+            width: 100%;
+            margin: 60px 0;
+            padding: 0;
+        }
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            height: 650px; /* Increased from 450px */
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+        }
+        .video-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .video-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.15);
+            z-index: 2;
+        }
+        .video-overlay h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 5.5rem; /* Increased from 3.5rem */
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            text-align: center;
+            letter-spacing: 12px; /* Increased spacing */
+            text-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            margin: 0;
+            padding: 40px 80px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px); /* Stronger blur */
+            border-radius: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
 
         .shop-grid {
-            max-width: 1250px; margin: auto; 
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(45%, 1fr));
-            gap: 20px; padding: 40px 15px 120px;
+            max-width: 1250px; 
+            margin: auto; 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px; 
+            padding: 40px 15px 80px;
         }
-
-        .empty-search {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 60px 20px;
-            color: #aaa;
-        }
-        .empty-search span { font-size: 4rem; display: block; margin-bottom: 10px; opacity: 0.6; }
 
         .p-card {
-            background: var(--cloud-white); backdrop-filter: blur(10px);
-            border-radius: 40px; overflow: hidden; position: relative;
-            transition: 0.4s ease; border: 1px solid rgba(255, 255, 255, 0.8); 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03); cursor: pointer;
+            background: var(--cloud-white); 
+            backdrop-filter: blur(10px);
+            border-radius: 35px; 
+            overflow: hidden; 
+            position: relative;
+            transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
+            border: 1px solid rgba(255, 255, 255, 0.8); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03); 
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
         }
-        .p-card:hover { transform: translateY(-12px); background: rgba(255, 255, 255, 0.9); }
 
-        .img-box { width: 100%; aspect-ratio: 1/1; position: relative; overflow: hidden; background: #fff; }
-        .display-img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s ease; }
-        .secondary-img { position: absolute; top: 0; left: 0; opacity: 0; }
+        .p-card:hover { 
+            transform: translateY(-12px); 
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 20px 40px rgba(100, 181, 246, 0.1);
+        }
+
+        .img-box { 
+            width: 100%; 
+            aspect-ratio: 1/1; 
+            position: relative; 
+            overflow: hidden; 
+            background: #fff; 
+        }
+
+        .display-img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: 0.6s ease; 
+        }
+
+        .secondary-img { 
+            position: absolute; 
+            top: 0; left: 0; 
+            opacity: 0; 
+        }
+
         .p-card:hover .primary-img { opacity: 0; }
         .p-card:hover .secondary-img { opacity: 1; transform: scale(1.05); }
 
-        .badge { position: absolute; top: 20px; left: 20px; padding: 8px 15px; border-radius: 15px; font-size: 0.7rem; font-weight: 700; z-index: 10; color: white; }
+        .badge { 
+            position: absolute; 
+            top: 15px; left: 15px; 
+            padding: 6px 14px; 
+            border-radius: 12px; 
+            font-size: 0.65rem; 
+            font-weight: 800; 
+            z-index: 10; 
+            color: white; 
+            letter-spacing: 1px;
+        }
         .badge-sale { background: var(--soft-pink); }
         .badge-new { background: var(--sky-blue); }
 
-        .p-info { padding: 25px; text-align: center; }
-        .p-price-row { display: flex; justify-content: center; align-items: center; gap: 12px; }
-        .old-price { text-decoration: line-through; color: #999; font-size: 0.9rem; }
-        .new-price { color: var(--sky-blue); font-weight: 700; font-size: 1.3rem; }
+        .p-info { 
+            padding: 22px; 
+            text-align: center; 
+            flex-grow: 1;
+        }
 
-        .bag-float {
-            position: fixed; bottom: 40px; right: 40px; 
-            background: var(--sky-blue); color: white;
-            width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 15px 35px rgba(100, 181, 246, 0.4); text-decoration: none; font-size: 1.6rem; z-index: 2000;
+        .p-info h3 {
+            font-size: 1rem;
+            margin: 0 0 10px;
+            font-weight: 600;
+            color: var(--text);
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
-        .bag-count {
-            position: absolute; top: 0; right: 0; background: #444; color: white; font-size: 0.75rem;
-            width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-weight: 700; border: 2px solid white;
+
+        .p-price-row { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 10px; 
         }
+
+        .old-price { text-decoration: line-through; color: #999; font-size: 0.85rem; }
+        .new-price { color: var(--sky-blue); font-weight: 700; font-size: 1.15rem; }
+
+        .banner-container {
+            max-width: 1250px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .main-banner {
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(135deg, #bbdefb 0%, #fce4ec 100%);
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255,255,255,0.5);
+            transition: transform 0.4s ease;
+        }
+
+        .banner-text h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            margin: 0;
+            text-shadow: 0 2px 10px rgba(255,255,255,0.5);
+        }
+
+        .banner-text p { font-weight: 600; opacity: 0.8; margin: 10px 0;}
 
         .announcement-bar { 
             background: var(--sky-blue); 
@@ -217,10 +378,75 @@
         }
         @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
-        .hero-section { padding: 60px 20px; text-align: center; background: rgba(255, 255, 255, 0.1); }
-        .hero-stats { display: flex; justify-content: center; gap: 20px; font-size: 0.8rem; font-weight: 700; color: var(--sky-blue); text-transform: uppercase; }
-
         #loading { text-align: center; padding: 100px; font-weight: 700; color: #aaa; }
+
+        .footer-wave-container { line-height: 0; width: 100%; margin-top: 50px; }
+        .cloud-wave-svg { position: relative; display: block; width: calc(100% + 1.3px); height: 70px; }
+        .cloud-wave-svg .shape-fill { fill: rgba(255, 255, 255, 0.4); }
+        .cloud-footer {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(15px);
+            padding: 40px 20px 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .footer-content {
+            display: flex; flex-wrap: wrap; justify-content: space-around;
+            max-width: 1100px; margin: 0 auto; text-align: center; gap: 30px;
+        }
+        .footer-brand h2 { font-family: 'Montserrat', sans-serif; color: var(--sky-blue); }
+        .footer-links h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text); opacity: 0.7; }
+        .footer-links a { 
+            display: block; text-decoration: none; color: var(--sky-blue); 
+            font-weight: 600; margin-bottom: 10px; font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .social-pills { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
+        .pill {
+            background: white; padding: 10px 20px; border-radius: 30px;
+            text-decoration: none; color: var(--sky-blue); font-weight: 700;
+            font-size: 0.85rem; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: 0.3s; border: none; cursor: pointer;
+        }
+        .pill:hover { transform: translateY(-5px); background: var(--sky-blue); color: white; }
+        .footer-copyright { text-align: center; margin-top: 40px; font-size: 0.75rem; opacity: 0.5; }
+
+        .bag-float {
+            position: fixed; bottom: 30px; right: 30px; 
+            background: var(--sky-blue); color: white;
+            width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 25px rgba(100, 181, 246, 0.4); text-decoration: none; font-size: 1.5rem; z-index: 2000;
+        }
+        .bag-count {
+            position: absolute; top: -2px; right: -2px; background: #444; color: white; font-size: 0.7rem;
+            width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: 700; border: 2px solid white;
+        }
+
+        .back-to-top {
+            position: fixed; bottom: 110px; right: 35px;
+            background: white; color: var(--sky-blue);
+            width: 55px; height: 40px; border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer; z-index: 2000; opacity: 0; visibility: hidden;
+            transition: 0.4s ease;
+            animation: cloudHover 3s ease-in-out infinite;
+        }
+        .back-to-top.visible { opacity: 1; visibility: visible; }
+        
+        @keyframes cloudHover {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @media (max-width: 768px) {
+            .video-wrapper { height: 350px; }
+            .video-overlay h2 { font-size: 2.2rem; padding: 20px 30px; letter-spacing: 4px; }
+            .scroller-card { flex: 0 0 250px; }
+            header h1 { font-size: 1.8rem; }
+            .main-banner { height: 200px; }
+            .shop-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        }
     </style>
 </head>
 <body>
@@ -232,15 +458,13 @@
 
     <header>
         <a href="../" class="brand-link"><h1>Comfy Clouds</h1></a>
-        
         <div class="search-wrapper">
             <input type="text" id="shopSearch" placeholder="Search for soft things..." onkeyup="runSearch()">
         </div>
-
         <div class="filter-nav">
             <button class="filter-tab active" onclick="setFilter('ALL', 'ALL', this)">Couples</button>
             <div class="dropdown">
-                <button class="dropbtn">Man ▽</button>
+                <button class="dropbtn" onclick="toggleDropdown(this)">Man ▽</button>
                 <div class="dropdown-content">
                     <a href="javascript:void(0)" onclick="setFilter('MALE', 'T-SHIRT', this)">T-Shirts</a>
                     <a href="javascript:void(0)" onclick="setFilter('MALE', 'PANTS', this)">Pants</a>
@@ -249,7 +473,7 @@
                 </div>
             </div>
             <div class="dropdown">
-                <button class="dropbtn">Women ▽</button>
+                <button class="dropbtn" onclick="toggleDropdown(this)">Women ▽</button>
                 <div class="dropdown-content">
                     <a href="javascript:void(0)" onclick="setFilter('FEMALE', 'T-SHIRT', this)">Tops</a>
                     <a href="javascript:void(0)" onclick="setFilter('FEMALE', 'PANTS', this)">Pants</a>
@@ -260,14 +484,34 @@
         </div>
     </header>
 
-    <section class="hero-section">
-        <div class="hero-content">
-            <h2>Soft as a Cloud</h2>
-            <div class="hero-stats">
-                <span>⭐ High Quality</span> <span>🚚 Fast Delivery</span> <span>🇪🇬 Proudly Egyptian</span>
+    <div class="banner-container">
+        <div class="main-banner">
+            <div class="banner-text">
+                <h2>The Ramadan Collection 🌙</h2>
+                <p>Stay cozy during late night suhoor.</p>
+                <button class="pill" onclick="document.getElementById('main-grid').scrollIntoView({behavior: 'smooth'})">Shop Now</button>
             </div>
         </div>
-    </section>
+    </div>
+
+    <div id="new-arrivals-section" class="scroller-container">
+        <h2 class="scroller-header">New Arrivals ✨</h2>
+        <button class="scroll-arrow arrow-left" onclick="scrollArr(-400)"><i class="fas fa-chevron-left"></i></button>
+        <div class="horizontal-scroller" id="new-scroller"></div>
+        <button class="scroll-arrow arrow-right" onclick="scrollArr(400)"><i class="fas fa-chevron-right"></i></button>
+    </div>
+
+    <div class="video-banner-container">
+        <div class="video-wrapper">
+            <video autoplay muted loop playsinline>
+                <source src="https://www.youtube.com/watch?v=mWYoXPAxWuQ&list=RDMM&index=27" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="video-overlay">
+                <h2>Stay Comfy</h2>
+            </div>
+        </div>
+    </div>
 
     <div class="bg-decoration">
         <div class="circle c1"></div>
@@ -276,6 +520,51 @@
 
     <div id="loading">Gathering the clouds...</div>
     <div class="shop-grid" id="main-grid"></div>
+
+    <div class="footer-wave-container">
+        <svg class="cloud-wave-svg" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C57.23,103.19,114.49,107.41,172,104.57c61.42-3,121.24-11.88,172.63-23.33Z" class="shape-fill"></path>
+        </svg>
+    </div>
+
+    <footer class="cloud-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>Comfy Clouds ☁️</h2>
+                <p>Your daily dose of comfort.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Men</h4>
+                <a onclick="setFilter('MALE', 'T-SHIRT')">T-Shirts</a>
+                <a onclick="setFilter('MALE', 'PANTS')">Pants</a>
+                <a onclick="setFilter('MALE', 'PJS')">PJS</a>
+            </div>
+            <div class="footer-links">
+                <h4>Women</h4>
+                <a onclick="setFilter('FEMALE', 'T-SHIRT')">Tops</a>
+                <a onclick="setFilter('FEMALE', 'PANTS')">Pants</a>
+                <a onclick="setFilter('FEMALE', 'PJS')">PJS</a>
+            </div>
+            <div class="footer-social">
+                <h4>Stay Connected</h4>
+                <div class="social-pills">
+                    <a href="https://www.instagram.com/comfy_clouds_/" target="_blank" class="pill">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </a>
+                    <a href="https://www.tiktok.com/@comfy_clouds_" target="_blank" class="pill">
+                        <i class="fab fa-tiktok"></i> TikTok
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>© 2026 Comfy Clouds | Made in Egypt 🇪🇬</p>
+        </div>
+    </footer>
+
+    <div class="back-to-top" id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <i class="fas fa-chevron-up"></i>
+    </div>
 
     <a href="../checkout/" class="bag-float">
         🛒<span class="bag-count" id="bag-total">0</span>
@@ -296,46 +585,93 @@
             }
         }
 
+        window.onscroll = function() {
+            const btn = document.getElementById('backToTop');
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        };
+
+        function toggleDropdown(btn) {
+            const parent = btn.parentElement;
+            const wasOpen = parent.classList.contains('show');
+            document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
+            if (!wasOpen) parent.classList.add('show');
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
+            }
+        }
+
+        function createProductCard(p, isScroller = false) {
+            const imgs = p.Img.split(',');
+            const sale = p["Sale Price"];
+            const isSale = sale && sale !== "" && sale < p.Price;
+            let badge = '';
+            if (isSale) badge = '<div class="badge badge-sale">SALE</div>';
+            else if (String(p.New).toUpperCase() === "TRUE") badge = '<div class="badge badge-new">NEW</div>';
+            
+            const card = document.createElement('div');
+            card.className = isScroller ? 'p-card scroller-card' : 'p-card';
+            card.onclick = () => window.location.href = `../product/?id=${p.ID}`;
+            card.innerHTML = `
+                ${badge}
+                <div class="img-box">
+                    <img src="${imgs[0].trim()}" class="display-img primary-img" loading="lazy">
+                    <img src="${(imgs[1] || imgs[0]).trim()}" class="display-img secondary-img" loading="lazy">
+                </div>
+                <div class="p-info">
+                    <h3>${p.Name}</h3>
+                    <div class="p-price-row">
+                        ${isSale ? `<span class="old-price">${p.Price} EGP</span>` : ''}
+                        <span class="new-price">${isSale ? sale : p.Price} EGP</span>
+                    </div>
+                </div>
+            `;
+            return card;
+        }
+
+        function scrollArr(amount) {
+            const scroller = document.getElementById('new-scroller');
+            const maxScrollLeft = scroller.scrollWidth - scroller.clientWidth;
+            
+            if (amount > 0 && scroller.scrollLeft >= maxScrollLeft - 10) {
+                scroller.scrollTo({ left: 0, behavior: 'smooth' });
+            } else if (amount < 0 && scroller.scrollLeft <= 10) {
+                scroller.scrollTo({ left: maxScrollLeft, behavior: 'smooth' });
+            } else {
+                scroller.scrollBy({ left: amount, behavior: 'smooth' });
+            }
+        }
+
         function render(items) {
             const grid = document.getElementById('main-grid');
-            document.getElementById('loading').style.display = 'none';
+            const newScroller = document.getElementById('new-scroller');
+            const loading = document.getElementById('loading');
+            
+            if (loading) loading.style.display = 'none';
             grid.innerHTML = '';
+            newScroller.innerHTML = '';
 
             if (items.length === 0) {
-                grid.innerHTML = `<div class="empty-search"><span>🌩️</span><h3>No clouds found here...</h3></div>`;
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 50px;"><h3>No clouds found here...</h3></div>`;
                 return;
             }
 
+            let hasNewItems = false;
             items.forEach(p => {
                 if (String(p.Visible).toUpperCase() !== "TRUE") return;
-                const imgs = p.Img.split(',');
-                const sale = p["Sale Price"];
-                const isSale = sale && sale !== "" && sale < p.Price;
-
-                let badge = '';
-                if (isSale) badge = '<div class="badge badge-sale">SALE</div>';
-                else if (String(p.New).toUpperCase() === "TRUE") badge = '<div class="badge badge-new">NEW</div>';
-
-                const card = document.createElement('div');
-                card.className = 'p-card';
-                // Click logic updated to folder method
-                card.onclick = () => window.location.href = `../product/?id=${p.ID}`;
-                card.innerHTML = `
-                    ${badge}
-                    <div class="img-box">
-                        <img src="${imgs[0].trim()}" class="display-img primary-img">
-                        <img src="${(imgs[1] || imgs[0]).trim()}" class="display-img secondary-img">
-                    </div>
-                    <div class="p-info">
-                        <h3>${p.Name}</h3>
-                        <div class="p-price-row">
-                            ${isSale ? `<span class="old-price">${p.Price} EGP</span>` : ''}
-                            <span class="new-price">${isSale ? sale : p.Price} EGP</span>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
+                grid.appendChild(createProductCard(p));
+                if (String(p.New).toUpperCase() === "TRUE") {
+                    newScroller.appendChild(createProductCard(p, true));
+                    hasNewItems = true;
+                }
             });
+            document.getElementById('new-arrivals-section').style.display = hasNewItems ? 'block' : 'none';
         }
 
         function runSearch() {
@@ -349,8 +685,7 @@
             const results = productsDatabase.filter(p => {
                 const name = String(p.Name).toLowerCase();
                 const category = String(p.Category).toLowerCase();
-                const gender = String(p.Gender).toLowerCase();
-                return name.includes(query) || category.includes(query) || gender.includes(query);
+                return name.includes(query) || category.includes(query);
             });
             render(results);
         }
@@ -358,12 +693,28 @@
         function setFilter(gender, category, btn) {
             document.getElementById('shopSearch').value = "";
             document.querySelectorAll('.filter-tab, .dropbtn').forEach(t => t.classList.remove('active'));
-            if (btn.classList.contains('dropbtn')) btn.classList.add('active');
-            else if (btn.tagName === 'A') btn.closest('.dropdown').querySelector('.dropbtn').classList.add('active');
-            else btn.classList.add('active');
             
-            if (gender === 'ALL') render(productsDatabase);
-            else {
+            if (btn) {
+                if (btn.classList.contains('dropbtn')) {
+                    btn.classList.add('active');
+                } else if (btn.tagName === 'A') {
+                    const drop = btn.closest('.dropdown');
+                    if (drop) drop.querySelector('.dropbtn').classList.add('active');
+                } else {
+                    btn.classList.add('active');
+                }
+            }
+            
+            const scrollerSection = document.getElementById('new-arrivals-section');
+            const videoBanner = document.querySelector('.video-banner-container');
+
+            if (gender === 'ALL') {
+                render(productsDatabase);
+                scrollerSection.style.display = 'block';
+                if(videoBanner) videoBanner.style.display = 'block';
+            } else {
+                scrollerSection.style.display = 'none'; 
+                if(videoBanner) videoBanner.style.display = 'none';
                 const filtered = productsDatabase.filter(p => {
                     const gMatch = String(p.Gender).toUpperCase() === gender.toUpperCase();
                     const cMatch = (category === 'ALL') || String(p.Category).toUpperCase().includes(category.toUpperCase());
@@ -371,11 +722,16 @@
                 });
                 render(filtered);
             }
+            
+            document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
+            const grid = document.getElementById('main-grid');
+            window.scrollTo({ top: grid.offsetTop - 150, behavior: 'smooth' });
         }
 
         function updateBagUI() {
             const cart = JSON.parse(localStorage.getItem('comfy_cart')) || [];
-            document.getElementById('bag-total').innerText = cart.length;
+            const bagEl = document.getElementById('bag-total');
+            if (bagEl) bagEl.innerText = cart.length;
         }
 
         initShop();
