@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Comfy Clouds 😶‍🌫️☁️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --sky-blue: #64b5f6;
+            --soft-pink: #f06292; 
+            --text: #4a4a4a; 
+        }
+
+        * { box-sizing: border-box; }
+
+        body { 
+            background: linear-gradient(-45deg, #e3f2fd, #fce4ec, #ffffff, #bbdefb);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: 'Poppins', sans-serif; 
+            color: var(--text); 
+            margin: 0; padding: 20px; min-height: 100vh; 
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #toast-container {
+            position: fixed; top: 20px; left: 50%;
+            transform: translateX(-50%); z-index: 9999;
+        }
+        .cloud-toast {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px; border-radius: 50px;
+            margin-bottom: 10px; box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(100, 181, 246, 0.2);
+            font-weight: 600; text-align: center; min-width: 250px;
+            animation: slideDown 0.5s ease forwards, fadeOut 0.5s ease 2.5s forwards;
+        }
+        @keyframes slideDown { 0% { transform: translateY(-50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeOut { 0% { opacity: 1; } 100% { opacity: 0; } }
+
+        .checkout-container { 
+            max-width: 600px; margin: 40px auto; 
+            background: #ffffff; border-radius: 40px; 
+            padding: 40px; box-shadow: 0 25px 50px rgba(0,0,0,0.08);
+        }
+
+        .back-link {
+            text-decoration: none; color: var(--sky-blue);
+            font-weight: 700; font-size: 0.9rem; display: inline-block; margin-bottom: 20px;
+        }
+
+        h2 { 
+            text-align: center; color: var(--sky-blue); 
+            font-family: 'Montserrat', sans-serif; font-weight: 900; 
+            margin-bottom: 30px; text-transform: uppercase;
+        }
+
+        .cart-row {
+            display: flex; align-items: center; gap: 15px;
+            padding: 15px 0; border-bottom: 1px solid #f0f0f0;
+        }
+        .cart-img { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; }
+        .cart-details { flex: 1; font-size: 0.9rem; }
+        .qty-controls { display: flex; align-items: center; gap: 10px; background: #f1f1f1; padding: 5px 10px; border-radius: 50px; }
+        .qty-btn { background: none; border: none; font-weight: 800; cursor: pointer; color: var(--sky-blue); }
+        .remove-btn { background: none; border: none; color: #ccc; font-size: 1.2rem; cursor: pointer; }
+
+        .total-box {
+            background: #f9f9ff; padding: 20px; border-radius: 20px;
+            text-align: center; font-size: 1.4rem; font-weight: 800;
+            color: var(--sky-blue); margin: 20px 0; border: 2px dashed rgba(100, 181, 246, 0.2);
+        }
+
+        .delivery-note {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        input, select { 
+            width: 100%; padding: 15px; margin-bottom: 15px;
+            border: 2px solid #f0f0f0; border-radius: 18px; font-size: 1rem;
+        }
+
+        .promo-wrap { display: flex; gap: 10px; margin-bottom: 20px; }
+        .promo-wrap input { margin-bottom: 0; }
+        .apply-btn { background: #444; color: white; border: none; padding: 0 25px; border-radius: 18px; cursor: pointer; font-weight: 700; }
+
+        .order-btn { 
+            width: 100%; padding: 22px; border: none; border-radius: 50px; 
+            background: var(--sky-blue); color: white; font-weight: 800; 
+            font-size: 1.1rem; cursor: pointer; transition: 0.4s;
+        }
+        .order-btn:hover { background: var(--soft-pink); transform: translateY(-3px); }
+        .order-btn:disabled {
+            background: #ccc !important;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast-container"></div>
+
+    <div class="checkout-container">
+        <a href="../main/" class="back-link">← Back to Products</a>
+        <h2>Your Bag ⛈️</h2>
+        <div id="cart-items"></div>
+        
+        <div class="total-box">Total: <span id="final-total">0</span> EGP</div>
+        <div class="delivery-note" id="delivery-info">Select a city for delivery price</div>
+
+        <input type="text" id="c-name" placeholder="Full Name">
+        <input type="tel" id="c-phone" placeholder="Phone (01xxxxxxxxx)">
+        
+        <select id="c-city" onchange="updateTotal()">
+            <option value="Cairo">Cairo</option>
+            <option value="Giza">Giza</option>
+            <option value="Alexandria">Alexandria</option>
+        </select>
+
+        <input type="text" id="c-addr" placeholder="Detailed Address">
+        
+        <div class="promo-wrap">
+            <input type="text" id="c-promo" placeholder="Promo Code">
+            <button class="apply-btn" onclick="applyPromo()">Apply</button>
+        </div>
+
+        <button class="order-btn" id="submit-order-btn" onclick="placeOrder()">COMPLETE ORDER</button>
+    </div>
+
+    <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxOZKl6cH1Fh3L_wJ9qX5SbD5Y5cSzpMmt3qRWiR_MJL-gQRNjWSxRDet0Nh4Eok4SXdA/exec";
+    
+    let cart = JSON.parse(localStorage.getItem('comfy_cart')) || [];
+    let discountRate = 0;
+    let LIVE_PROMOS = {};
+
+    function showToast(msg) {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = 'cloud-toast';
+        toast.innerText = msg;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    async function fetchPromos() {
+        try {
+            const res = await fetch(SCRIPT_URL);
+            LIVE_PROMOS = await res.json();
+        } catch (e) { console.error("Promo fetch failed", e); }
+    }
+
+    function loadCart() {
+        const list = document.getElementById('cart-items');
+        list.innerHTML = cart.length === 0 ? "<p style='text-align:center;'>Bag is empty</p>" : "";
+        document.getElementById('submit-order-btn').disabled = (cart.length === 0);
+        
+        cart.forEach((item, index) => {
+            const isLimitReached = item.MaxStock && item.Qty >= item.MaxStock;
+
+            list.innerHTML += `<div class="cart-row">
+                <img src="${item.Img}" class="cart-img">
+                <div class="cart-details"><b>${item.Name}</b><br><small>${item.Size}</small></div>
+                <div class="qty-controls">
+                    <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
+                    <span>${item.Qty}</span>
+                    <button class="qty-btn" 
+                            onclick="changeQty(${index}, 1)" 
+                            style="${isLimitReached ? 'opacity:0.3; cursor:not-allowed;' : ''}">+</button>
+                </div>
+                <button class="remove-btn" onclick="removeItem(${index})">×</button>
+            </div>`;
+        });
+        updateTotal();
+    }
+
+    function changeQty(index, n) {
+        const item = cart[index];
+        const newQty = item.Qty + n;
+
+        if (n === 1) { 
+            if (item.MaxStock && item.Qty >= item.MaxStock) {
+                showToast(`Only ${item.MaxStock} available in stock! ☁️`);
+                return;
+            }
+        }
+
+        if (newQty > 0) {
+            item.Qty = newQty;
+            saveAndReload();
+        }
+    }
+
+    function removeItem(index) {
+        cart.splice(index, 1);
+        saveAndReload();
+    }
+
+    function saveAndReload() {
+        localStorage.setItem('comfy_cart', JSON.stringify(cart));
+        loadCart();
+    }
+
+    function applyPromo() {
+        const inputCode = document.getElementById('c-promo').value.trim().toUpperCase();
+        if (LIVE_PROMOS[inputCode]) {
+            discountRate = LIVE_PROMOS[inputCode];
+            showToast(`Success! ${discountRate * 100}% discount applied. ✨`);
+        } else {
+            discountRate = 0;
+            showToast("Invalid Code ⛈️");
+        }
+        updateTotal();
+    }
+
+    function updateTotal() {
+        let base = cart.reduce((sum, i) => sum + (i.Price * i.Qty), 0);
+        let discountedSubtotal = base - (base * discountRate);
+
+        const city = document.getElementById('c-city').value;
+        let deliveryFee = (city === "Cairo") ? 35 : 60;
+
+        if (discountedSubtotal >= 2000) {
+            deliveryFee = 0;
+            document.getElementById('delivery-info').innerText = "Free Delivery applied! ☁️✨";
+        } else {
+            document.getElementById('delivery-info').innerText = `Delivery to ${city}: ${deliveryFee} EGP`;
+        }
+
+        document.getElementById('final-total').innerText = Math.round(discountedSubtotal + deliveryFee);
+    }
+
+    async function placeOrder() {
+        if (cart.length === 0) {
+            showToast("Bag is empty ☁️");
+            return;
+        }
+
+        const name = document.getElementById('c-name').value.trim();
+        const phone = document.getElementById('c-phone').value.trim();
+        const city = document.getElementById('c-city').value;
+        const addr = document.getElementById('c-addr').value.trim();
+        const promo = document.getElementById('c-promo').value.trim().toUpperCase() || "None";
+        const total = document.getElementById('final-total').innerText;
+        const btn = document.getElementById('submit-order-btn');
+
+        const nameRegex = /^[a-zA-Z\s\u0600-\u06FF]{3,40}$/;
+        const phoneRegex = /^01[0-2,5]{1}[0-9]{8}$/;
+
+        if (!nameRegex.test(name)) { showToast("Please enter a valid name"); return; }
+        if (!phoneRegex.test(phone)) { showToast("Check Phone number"); return; }
+        if (!city || addr.length < 5) { showToast("Please check address"); return; }
+
+        btn.disabled = true;
+        btn.innerText = "SENDING ORDER...";
+
+        const orderId = "CC-" + Math.random().toString(36).substr(2, 5).toUpperCase();
+        const fullAddr = `${city}, ${addr}`;
+        const itemsList = cart.map(i => `- ${i.Qty}x ${i.Name} (${i.Size})`).join('\n');
+
+        try {
+            // Updated payload to match your required log format
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify({ orderId, name, phone, address: fullAddr, items: itemsList, promo, total })
+            });
+
+            setTimeout(() => {
+                localStorage.removeItem('comfy_cart');
+                // UPDATED REDIRECTION
+                window.location.href = "../thank-you/";
+            }, 1000);
+
+        } catch (e) {
+            showToast("Error sending order. Try again.");
+            btn.disabled = false;
+            btn.innerText = "COMPLETE ORDER";
+        }
+    }
+
+    fetchPromos();
+    loadCart();
+    </script>
+</body>
+</html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comfy Clouds</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --sky-blue: #64b5f6;
+            --soft-pink: #f06292; 
+            --cloud-white: rgba(255, 255, 255, 0.5);
+            --text: #4a4a4a; 
+        }
+
+        body { 
+            background: linear-gradient(-45deg, #e3f2fd, #fce4ec, #ffffff, #bbdefb);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: 'Poppins', sans-serif; 
+            color: var(--text); 
+            margin: 0; padding: 0; min-height: 100vh; 
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .bg-decoration {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px); 
+            opacity: 0.6;
+            animation: floatCloud 20s ease-in-out infinite;
+        }
+
+        .c1 { width: 450px; height: 450px; background: #90caf9; top: -100px; left: -100px; }
+        .c2 { width: 550px; height: 550px; background: #f48fb1; bottom: -50px; right: -100px; animation-delay: -5s; }
+        
+        @keyframes floatCloud {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(40px, 60px) scale(1.1); }
+        }
+
+        header { 
+            text-align: center; 
+            padding: 40px 20px; 
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.4);
+        }
+
+        .brand-link { text-decoration: none; display: inline-block; }
+
+        header h1 { 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem; font-weight: 900;
+            text-transform: uppercase;
+            margin: 0 0 20px; letter-spacing: 1px;
+            background: linear-gradient(to right, #e8aeff 0%, #ffbcfc 25%, #cff1ff 50%, #ffffff 75%, #87CEEB 100%);
+            background-size: 200% auto;
+            animation: cloudMove 8s linear infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            -webkit-text-stroke: 0.5px rgba(135, 206, 235, 0.3);
+        }
+
+        @keyframes cloudMove {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .search-wrapper {
+            max-width: 400px;
+            margin: 0 auto 25px;
+            padding: 0 15px;
+        }
+        #shopSearch {
+            width: 100%;
+            padding: 12px 25px;
+            border-radius: 50px;
+            border: 2px solid rgba(255,255,255,0.8);
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(5px);
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+            transition: 0.3s ease;
+            box-sizing: border-box;
+            color: var(--text);
+        }
+        #shopSearch:focus {
+            background: white;
+            border-color: var(--sky-blue);
+            box-shadow: 0 8px 20px rgba(100, 181, 246, 0.15);
+        }
+
+        .filter-nav { display: flex; justify: center; gap: 15px; flex-wrap: wrap; justify-content: center; }
+        .dropdown { position: relative; display: inline-block; }
+        
+        .dropbtn, .filter-tab {
+            background: rgba(255, 255, 255, 0.5); 
+            border: 1px solid rgba(255, 255, 255, 0.8); 
+            padding: 10px 25px; border-radius: 50px;
+            font-weight: 600; color: #777; cursor: pointer; 
+            transition: 0.3s; text-transform: uppercase; 
+            font-size: 0.8rem; font-family: 'Poppins', sans-serif;
+        }
+
+        .filter-tab.active, .dropbtn.active {
+            background: var(--sky-blue); color: white; border-color: var(--sky-blue);
+        }
+
+        .dropdown-content {
+            display: none; 
+            position: absolute; 
+            background-color: white;
+            min-width: 160px; 
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.1);
+            border-radius: 15px; 
+            z-index: 10; 
+            top: 38px;
+            left: 50%;
+            transform: translateX(-50%); 
+        }
+
+        .dropdown-content::before {
+            content: "";
+            position: absolute;
+            top: -20px; 
+            left: 0; right: 0;
+            height: 25px;
+            background: transparent;
+        }
+
+        .dropdown-content a {
+            color: #777; 
+            padding: 12px 16px; 
+            text-decoration: none;
+            display: block; 
+            font-size: 0.8rem; 
+            font-weight: 600; 
+            text-align: center;
+        }
+
+        .dropdown-content a:hover { background-color: var(--sky-blue); color: white; }
+        .dropdown:hover .dropdown-content { display: block; }
+
+        .shop-grid {
+            max-width: 1250px; margin: auto; 
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(45%, 1fr));
+            gap: 20px; padding: 40px 15px 120px;
+        }
+
+        .empty-search {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: #aaa;
+        }
+        .empty-search span { font-size: 4rem; display: block; margin-bottom: 10px; opacity: 0.6; }
+
+        .p-card {
+            background: var(--cloud-white); backdrop-filter: blur(10px);
+            border-radius: 40px; overflow: hidden; position: relative;
+            transition: 0.4s ease; border: 1px solid rgba(255, 255, 255, 0.8); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03); cursor: pointer;
+        }
+        .p-card:hover { transform: translateY(-12px); background: rgba(255, 255, 255, 0.9); }
+
+        .img-box { width: 100%; aspect-ratio: 1/1; position: relative; overflow: hidden; background: #fff; }
+        .display-img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s ease; }
+        .secondary-img { position: absolute; top: 0; left: 0; opacity: 0; }
+        .p-card:hover .primary-img { opacity: 0; }
+        .p-card:hover .secondary-img { opacity: 1; transform: scale(1.05); }
+
+        .badge { position: absolute; top: 20px; left: 20px; padding: 8px 15px; border-radius: 15px; font-size: 0.7rem; font-weight: 700; z-index: 10; color: white; }
+        .badge-sale { background: var(--soft-pink); }
+        .badge-new { background: var(--sky-blue); }
+
+        .p-info { padding: 25px; text-align: center; }
+        .p-price-row { display: flex; justify-content: center; align-items: center; gap: 12px; }
+        .old-price { text-decoration: line-through; color: #999; font-size: 0.9rem; }
+        .new-price { color: var(--sky-blue); font-weight: 700; font-size: 1.3rem; }
+
+        .bag-float {
+            position: fixed; bottom: 40px; right: 40px; 
+            background: var(--sky-blue); color: white;
+            width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 15px 35px rgba(100, 181, 246, 0.4); text-decoration: none; font-size: 1.6rem; z-index: 2000;
+        }
+        .bag-count {
+            position: absolute; top: 0; right: 0; background: #444; color: white; font-size: 0.75rem;
+            width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: 700; border: 2px solid white;
+        }
+
+        .announcement-bar { 
+            background: var(--sky-blue); 
+            color: white; padding: 10px 0; font-size: 0.85rem; 
+            font-weight: 600; overflow: hidden; white-space: nowrap;
+        }
+        .scrolling-text {
+            display: inline-block; padding-left: 100%;
+            animation: marquee 25s linear infinite;
+        }
+        @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
+
+        .hero-section { padding: 60px 20px; text-align: center; background: rgba(255, 255, 255, 0.1); }
+        .hero-stats { display: flex; justify-content: center; gap: 20px; font-size: 0.8rem; font-weight: 700; color: var(--sky-blue); text-transform: uppercase; }
+
+        #loading { text-align: center; padding: 100px; font-weight: 700; color: #aaa; }
+    </style>
+</head>
+<body>
+    <div class="announcement-bar">
+        <div class="scrolling-text">
+            ✨ Free Shipping on orders over 2000 EGP | Use code <b>COMFY20</b> for 20% off! | Soft as a Cloud, Made in Egypt🇪🇬 | New Arrivals are here! ✨
+        </div>
+    </div>
+
+    <header>
+        <a href="../" class="brand-link"><h1>Comfy Clouds</h1></a>
+        
+        <div class="search-wrapper">
+            <input type="text" id="shopSearch" placeholder="Search for soft things..." onkeyup="runSearch()">
+        </div>
+
+        <div class="filter-nav">
+            <button class="filter-tab active" onclick="setFilter('ALL', 'ALL', this)">Couples</button>
+            <div class="dropdown">
+                <button class="dropbtn">Man ▽</button>
+                <div class="dropdown-content">
+                    <a href="javascript:void(0)" onclick="setFilter('MALE', 'T-SHIRT', this)">T-Shirts</a>
+                    <a href="javascript:void(0)" onclick="setFilter('MALE', 'PANTS', this)">Pants</a>
+                    <a href="javascript:void(0)" onclick="setFilter('MALE', 'PJS', this)">PJS</a>
+                    <a href="javascript:void(0)" onclick="setFilter('MALE', 'ALL', this)">All Man</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">Women ▽</button>
+                <div class="dropdown-content">
+                    <a href="javascript:void(0)" onclick="setFilter('FEMALE', 'T-SHIRT', this)">Tops</a>
+                    <a href="javascript:void(0)" onclick="setFilter('FEMALE', 'PANTS', this)">Pants</a>
+                    <a href="javascript:void(0)" onclick="setFilter('FEMALE', 'PJS', this)">PJS</a>
+                    <a href="javascript:void(0)" onclick="setFilter('FEMALE', 'ALL', this)">All Women</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h2>Soft as a Cloud</h2>
+            <div class="hero-stats">
+                <span>⭐ High Quality</span> <span>🚚 Fast Delivery</span> <span>🇪🇬 Proudly Egyptian</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="bg-decoration">
+        <div class="circle c1"></div>
+        <div class="circle c2"></div>
+    </div>
+
+    <div id="loading">Gathering the clouds...</div>
+    <div class="shop-grid" id="main-grid"></div>
+
+    <a href="../checkout/" class="bag-float">
+        🛒<span class="bag-count" id="bag-total">0</span>
+    </a>
+
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsc-LQJwIFX_LVhHd2olYG9RJ-1Ln3RSxWXnAntQFBDkgWzApnuoT68uPFE9cK8pc2OQ/exec";
+        let productsDatabase = [];
+
+        async function initShop() {
+            try {
+                const response = await fetch(SCRIPT_URL);
+                productsDatabase = await response.json();
+                render(productsDatabase);
+                updateBagUI();
+            } catch (err) {
+                document.getElementById('loading').innerText = "Refresh to clear the fog. 🌧️";
+            }
+        }
+
+        function render(items) {
+            const grid = document.getElementById('main-grid');
+            document.getElementById('loading').style.display = 'none';
+            grid.innerHTML = '';
+
+            if (items.length === 0) {
+                grid.innerHTML = `<div class="empty-search"><span>🌩️</span><h3>No clouds found here...</h3></div>`;
+                return;
+            }
+
+            items.forEach(p => {
+                if (String(p.Visible).toUpperCase() !== "TRUE") return;
+                const imgs = p.Img.split(',');
+                const sale = p["Sale Price"];
+                const isSale = sale && sale !== "" && sale < p.Price;
+
+                let badge = '';
+                if (isSale) badge = '<div class="badge badge-sale">SALE</div>';
+                else if (String(p.New).toUpperCase() === "TRUE") badge = '<div class="badge badge-new">NEW</div>';
+
+                const card = document.createElement('div');
+                card.className = 'p-card';
+                // Click logic updated to folder method
+                card.onclick = () => window.location.href = `../product/?id=${p.ID}`;
+                card.innerHTML = `
+                    ${badge}
+                    <div class="img-box">
+                        <img src="${imgs[0].trim()}" class="display-img primary-img">
+                        <img src="${(imgs[1] || imgs[0]).trim()}" class="display-img secondary-img">
+                    </div>
+                    <div class="p-info">
+                        <h3>${p.Name}</h3>
+                        <div class="p-price-row">
+                            ${isSale ? `<span class="old-price">${p.Price} EGP</span>` : ''}
+                            <span class="new-price">${isSale ? sale : p.Price} EGP</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function runSearch() {
+            const query = document.getElementById('shopSearch').value.toLowerCase();
+            document.querySelectorAll('.filter-tab, .dropbtn').forEach(t => t.classList.remove('active'));
+            if (query.trim() === "") {
+                document.querySelector('.filter-tab').classList.add('active');
+                render(productsDatabase);
+                return;
+            }
+            const results = productsDatabase.filter(p => {
+                const name = String(p.Name).toLowerCase();
+                const category = String(p.Category).toLowerCase();
+                const gender = String(p.Gender).toLowerCase();
+                return name.includes(query) || category.includes(query) || gender.includes(query);
+            });
+            render(results);
+        }
+
+        function setFilter(gender, category, btn) {
+            document.getElementById('shopSearch').value = "";
+            document.querySelectorAll('.filter-tab, .dropbtn').forEach(t => t.classList.remove('active'));
+            if (btn.classList.contains('dropbtn')) btn.classList.add('active');
+            else if (btn.tagName === 'A') btn.closest('.dropdown').querySelector('.dropbtn').classList.add('active');
+            else btn.classList.add('active');
+            
+            if (gender === 'ALL') render(productsDatabase);
+            else {
+                const filtered = productsDatabase.filter(p => {
+                    const gMatch = String(p.Gender).toUpperCase() === gender.toUpperCase();
+                    const cMatch = (category === 'ALL') || String(p.Category).toUpperCase().includes(category.toUpperCase());
+                    return gMatch && cMatch;
+                });
+                render(filtered);
+            }
+        }
+
+        function updateBagUI() {
+            const cart = JSON.parse(localStorage.getItem('comfy_cart')) || [];
+            document.getElementById('bag-total').innerText = cart.length;
+        }
+
+        initShop();
+    </script>
+</body>
+</html>
