@@ -198,7 +198,6 @@
         .arrow-left { left: 0; }
         .arrow-right { right: 0; }
 
-        /* --- UPDATED VIDEO BANNER SECTION (BIGGER & WIDER) --- */
         .video-banner-container {
             width: 100%;
             margin: 60px 0;
@@ -207,7 +206,7 @@
         .video-wrapper {
             position: relative;
             width: 100%;
-            height: 650px; /* Increased from 450px */
+            height: 650px; 
             overflow: hidden;
             box-shadow: 0 20px 50px rgba(0,0,0,0.1);
         }
@@ -228,17 +227,17 @@
         }
         .video-overlay h2 {
             font-family: 'Montserrat', sans-serif;
-            font-size: 5.5rem; /* Increased from 3.5rem */
+            font-size: 5.5rem;
             font-weight: 900;
             color: white;
             text-transform: uppercase;
             text-align: center;
-            letter-spacing: 12px; /* Increased spacing */
+            letter-spacing: 12px;
             text-shadow: 0 10px 30px rgba(0,0,0,0.4);
             margin: 0;
             padding: 40px 80px;
             background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(15px); /* Stronger blur */
+            backdrop-filter: blur(15px);
             border-radius: 30px;
             border: 2px solid rgba(255, 255, 255, 0.3);
         }
@@ -383,6 +382,7 @@
         .footer-wave-container { line-height: 0; width: 100%; margin-top: 50px; }
         .cloud-wave-svg { position: relative; display: block; width: calc(100% + 1.3px); height: 70px; }
         .cloud-wave-svg .shape-fill { fill: rgba(255, 255, 255, 0.4); }
+        
         .cloud-footer {
             background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(15px);
@@ -390,16 +390,21 @@
             border-top: 1px solid rgba(255, 255, 255, 0.5);
         }
         .footer-content {
-            display: flex; flex-wrap: wrap; justify-content: space-around;
-            max-width: 1100px; margin: 0 auto; text-align: center; gap: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            gap: 40px;
         }
-        .footer-brand h2 { font-family: 'Montserrat', sans-serif; color: var(--sky-blue); }
-        .footer-links h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text); opacity: 0.7; }
+        .footer-brand h2 { font-family: 'Montserrat', sans-serif; color: var(--sky-blue); margin-bottom: 10px; }
+        .footer-links h4 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text); opacity: 0.7; margin-bottom: 20px; }
         .footer-links a { 
             display: block; text-decoration: none; color: var(--sky-blue); 
-            font-weight: 600; margin-bottom: 10px; font-size: 0.9rem;
-            cursor: pointer;
+            font-weight: 600; margin-bottom: 12px; font-size: 0.9rem;
+            cursor: pointer; transition: 0.2s;
         }
+        .footer-links a:hover { color: var(--soft-pink); }
         .social-pills { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
         .pill {
             background: white; padding: 10px 20px; border-radius: 30px;
@@ -446,6 +451,7 @@
             header h1 { font-size: 1.8rem; }
             .main-banner { height: 200px; }
             .shop-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .footer-content { grid-template-columns: 1fr; gap: 30px; }
         }
     </style>
 </head>
@@ -532,21 +538,6 @@
             <div class="footer-brand">
                 <h2>Comfy Clouds ☁️</h2>
                 <p>Your daily dose of comfort.</p>
-            </div>
-            <div class="footer-links">
-                <h4>Men</h4>
-                <a onclick="setFilter('MALE', 'T-SHIRT')">T-Shirts</a>
-                <a onclick="setFilter('MALE', 'PANTS')">Pants</a>
-                <a onclick="setFilter('MALE', 'PJS')">PJS</a>
-            </div>
-            <div class="footer-links">
-                <h4>Women</h4>
-                <a onclick="setFilter('FEMALE', 'T-SHIRT')">Tops</a>
-                <a onclick="setFilter('FEMALE', 'PANTS')">Pants</a>
-                <a onclick="setFilter('FEMALE', 'PJS')">PJS</a>
-            </div>
-            <div class="footer-social">
-                <h4>Stay Connected</h4>
                 <div class="social-pills">
                     <a href="https://www.instagram.com/comfy_clouds_/" target="_blank" class="pill">
                         <i class="fab fa-instagram"></i> Instagram
@@ -556,17 +547,31 @@
                     </a>
                 </div>
             </div>
-        </div>
-        <footer>
+
             <div class="footer-links">
-                <h3>Support</h3>
-                <ul>
-                    <li><a href="../shipping/">Delivery & Shipping</a></li>
-                    <li><a href="../refunds/">Refund Policy</a></li>
-                    <li><a href="../terms/">Terms of Service</a></li>
-                </ul>
+                <h4>Shop Men</h4>
+                <a onclick="setFilter('MALE', 'T-SHIRT')">T-Shirts</a>
+                <a onclick="setFilter('MALE', 'PANTS')">Pants</a>
+                <a onclick="setFilter('MALE', 'PJS')">PJS</a>
+                <a onclick="setFilter('MALE', 'ALL')">View All</a>
             </div>
-        </footer>
+
+            <div class="footer-links">
+                <h4>Shop Women</h4>
+                <a onclick="setFilter('FEMALE', 'T-SHIRT')">Tops</a>
+                <a onclick="setFilter('FEMALE', 'PANTS')">Pants</a>
+                <a onclick="setFilter('FEMALE', 'PJS')">PJS</a>
+                <a onclick="setFilter('FEMALE', 'ALL')">View All</a>
+            </div>
+
+            <div class="footer-links">
+                <h4>Support</h4>
+                <a href="../shipping/">Delivery & Shipping</a>
+                <a href="../refunds/">Refund Policy</a>
+                <a href="../terms/">Terms of Service</a>
+                <a href="../privacy/">Privacy Policy</a>
+            </div>
+        </div>
 
         <div class="footer-copyright">
             <p>© 2026 Comfy Clouds | Made in Egypt 🇪🇬</p>
@@ -749,5 +754,3 @@
     </script>
 </body>
 </html>
-
-
