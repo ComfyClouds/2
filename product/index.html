@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product | Comfy Clouds 😶‍🌫️☁️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Poppins:wght@400;600;700&family=Montserrat:wght@900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { 
@@ -23,13 +23,8 @@
         }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        .nav-header { max-width: 1000px; margin: 20px auto 10px; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; }
+        .nav-links { max-width: 1000px; margin: 20px auto 10px; display: flex; justify-content: space-between; padding: 0 15px; }
         .nav-links a { text-decoration: none; color: var(--sky-blue); font-weight: 700; background: white; padding: 8px 20px; border-radius: 50px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; }
-
-        /* CART ICON */
-        .cart-icon-wrap { position: relative; cursor: pointer; background: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); color: var(--sky-blue); transition: 0.3s; }
-        .cart-icon-wrap:hover { transform: scale(1.1); color: var(--soft-pink); }
-        .cart-count { position: absolute; top: -5px; right: -5px; background: var(--soft-pink); color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 10px; font-weight: 700; }
 
         .product-container { 
             max-width: 1050px; margin: 20px auto 60px; 
@@ -62,8 +57,19 @@
         .qty-btn { width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer; background: white; font-weight: 700; }
 
         .btn-stack { display: flex; flex-direction: column; gap: 12px; }
-        .buy-btn { width: 100%; padding: 22px; border-radius: 50px; border: none; background: var(--sky-blue); color: white; font-weight: 800; font-size: 1.1rem; text-transform: uppercase; cursor: pointer; transition: 0.4s; box-shadow: 0 10px 20px rgba(100, 181, 246, 0.3); }
-        .buy-btn:hover { background: var(--soft-pink); transform: translateY(-3px); box-shadow: 0 15px 30px rgba(240, 98, 146, 0.4); }
+        .add-btn { 
+            position: relative; width: 100%; height: 65px; border-radius: 50px; border: none; 
+            background: var(--sky-blue); color: white; font-weight: 800; 
+            font-size: 1rem; text-transform: uppercase; cursor: pointer; 
+            overflow: hidden; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-content { position: absolute; width: 100%; height: 100%; top: 0; left: 0; display: flex; align-items: center; justify-content: center; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .btn-icon { transform: translateY(100%); font-size: 1.8rem; }
+        .add-btn.success { background: var(--success-green); }
+        .add-btn.success .btn-text { transform: translateY(-100%); opacity: 0; }
+        .add-btn.success .btn-icon { transform: translateY(0); }
+
+        .buy-btn { width: 100%; padding: 20px; border-radius: 50px; border: 2px solid var(--sky-blue); background: transparent; color: var(--sky-blue); font-weight: 800; font-size: 1rem; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
 
         .related-section { max-width: 1050px; margin: 40px auto; padding: 0 15px; }
         .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
@@ -75,13 +81,13 @@
         .related-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); border-color: var(--sky-blue); }
         .related-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 20px; margin-bottom: 12px; }
 
-        /* FOOTER */
+        /* FOOTER STYLES */
         .footer-wave-container { line-height: 0; width: 100%; margin-top: 50px; }
         .cloud-wave-svg { position: relative; display: block; width: calc(100% + 1.3px); height: 70px; }
         .cloud-wave-svg .shape-fill { fill: rgba(255, 255, 255, 0.4); }
         .cloud-footer { background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(15px); padding: 40px 20px 30px; border-top: 1px solid rgba(255, 255, 255, 0.5); }
         .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); max-width: 1200px; margin: 0 auto; text-align: center; gap: 40px; }
-        .footer-brand h2 { font-family: 'Montserrat', sans-serif; color: var(--sky-blue); margin-bottom: 10px; }
+        .footer-brand h2 { color: var(--sky-blue); margin-bottom: 10px; }
         .social-pills { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
         .pill { background: white; padding: 10px 20px; border-radius: 30px; text-decoration: none; color: var(--sky-blue); font-weight: 700; font-size: 0.85rem; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; }
         .pill:hover { transform: translateY(-5px); background: var(--sky-blue); color: white; }
@@ -103,12 +109,9 @@
 </head>
 <body>
 
-    <div class="nav-header">
-        <div class="nav-links"><a href="../main/">← Back</a></div>
-        <div class="cart-icon-wrap" onclick="window.location.href='../checkout/'">
-            <i class="fas fa-shopping-cart"></i>
-            <span id="cart-count" class="cart-count">0</span>
-        </div>
+    <div class="nav-links">
+        <a href="../main/">← Back to Shop</a>
+        <a href="../checkout/">View Bag 🛒</a>
     </div>
 
     <div id="toast-container"></div>
@@ -137,6 +140,10 @@
             </div>
 
             <div class="btn-stack">
+                <button class="add-btn" id="add-btn" onclick="handleAddToCart()">
+                    <div class="btn-content btn-text">ADD TO BAG 🛒</div>
+                    <div class="btn-content btn-icon">✓</div>
+                </button>
                 <button class="buy-btn" onclick="buyNow()">BUY IT NOW ✨</button>
             </div>
         </div>
@@ -165,20 +172,25 @@
             </div>
             <div class="footer-links">
                 <h4>Shop</h4>
-                <a href="../main/">Men</a><a href="../main/">Women</a><a href="../main/">New</a>
+                <a href="../main/">Men</a>
+                <a href="../main/">Women</a>
+                <a href="../main/">New Arrivals</a>
             </div>
             <div class="footer-links">
                 <h4>Support</h4>
-                <a href="../shipping/">Shipping</a><a href="../refunds/">Refunds</a><a href="../terms/">Terms</a>
+                <a href="../shipping/">Shipping</a>
+                <a href="../refunds/">Refunds</a>
+                <a href="../terms/">Terms</a>
             </div>
         </div>
-        <div class="footer-copyright"><p>© 2026 Comfy Clouds | Made in Egypt 🇪🇬</p></div>
+        <div class="footer-copyright">
+            <p>© 2026 Comfy Clouds | Made in Egypt 🇪🇬</p>
+        </div>
     </footer>
 
     <div class="back-to-top" id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
         <i class="fas fa-chevron-up"></i>
     </div>
-
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsc-LQJwIFX_LVhHd2olYG9RJ-1Ln3RSxWXnAntQFBDkgWzApnuoT68uPFE9cK8pc2OQ/exec";
         const urlParams = new URLSearchParams(window.location.search);
@@ -189,12 +201,7 @@
         let currentQty = 1;
         let availableStock = 0;
 
-        function updateCartBadge() {
-            const cart = JSON.parse(localStorage.getItem('comfy_cart')) || [];
-            const count = cart.reduce((acc, item) => acc + item.Qty, 0);
-            document.getElementById('cart-count').innerText = count;
-        }
-
+        // Back to Top Scroll Logic
         window.onscroll = function() {
             const btn = document.getElementById('backToTop');
             if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
@@ -205,7 +212,6 @@
         };
 
         async function loadProduct() {
-            updateCartBadge();
             try {
                 const res = await fetch(SCRIPT_URL);
                 const data = await res.json();
@@ -255,7 +261,8 @@
                             btn.classList.add('active');
                             selectedSize = sz;
                             availableStock = stockValue;
-                            document.getElementById('stock-warn').innerText = availableStock < 5 ? `🔥 Only ${availableStock} left!` : "";
+                            const warn = document.getElementById('stock-warn');
+                            warn.innerText = availableStock < 5 ? `🔥 Only ${availableStock} left!` : "";
                             currentQty = 1;
                             document.getElementById('qty-val').innerText = 1;
                         };
@@ -267,9 +274,19 @@
             } catch (e) { console.log(e); }
         }
 
+        function handleAddToCart() {
+            if (!selectedSize) return showToast("Please select a size first!");
+            addToCartLogic();
+            const btn = document.getElementById('add-btn');
+            btn.classList.add('success');
+            setTimeout(() => btn.classList.remove('success'), 2000);
+        }
+
         function addToCartLogic() {
             let cart = JSON.parse(localStorage.getItem('comfy_cart')) || [];
-            const existingItem = cart.find(item => item.Name === currentProduct.Name && item.Size === selectedSize);
+            const existingItem = cart.find(item => 
+                item.Name === currentProduct.Name && item.Size === selectedSize
+            );
 
             if (existingItem) {
                 let newQty = existingItem.Qty + currentQty;
@@ -277,7 +294,7 @@
                     existingItem.Qty = newQty;
                 } else {
                     existingItem.Qty = availableStock;
-                    showToast("Maximum stock reached!");
+                    showToast("Maximum stock reached for this size!");
                 }
             } else {
                 cart.push({
@@ -291,13 +308,17 @@
                 });
             }
             localStorage.setItem('comfy_cart', JSON.stringify(cart));
-            updateCartBadge();
         }
 
         function loadRelated(all, cat) {
             const grid = document.getElementById('related-grid');
-            let items = all.filter(p => p.Category === cat && String(p.ID) !== productID).sort(() => 0.5 - Math.random()).slice(0, 4);
-            items.forEach(p => {
+            let sameCat = all.filter(p => p.Category === cat && String(p.ID) !== productID);
+            let diffCat = all.filter(p => p.Category !== cat && String(p.ID) !== productID);
+            sameCat.sort(() => 0.5 - Math.random());
+            diffCat.sort(() => 0.5 - Math.random());
+            let finalSelection = [...sameCat, ...diffCat].slice(0, 4);
+
+            finalSelection.forEach(p => {
                 grid.innerHTML += `
                     <a href="../product/?id=${p.ID}" class="related-card">
                         <img src="${p.Img.split(',')[0].trim()}">
@@ -318,7 +339,7 @@
 
         function buyNow() {
             if (!selectedSize) return showToast("Please select a size first!");
-            addToCartLogic();
+            handleAddToCart();
             window.location.href = "../checkout/";
         }
 
