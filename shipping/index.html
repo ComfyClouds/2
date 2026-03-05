@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipping & Delivery | Comfy Clouds</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        body {
+            background-color: #f9fbfd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        .policy-box {
+            background: white;
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+        .brand-logo {
+            font-size: 14px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #b5b5b5;
+            margin-bottom: 10px;
+            display: block;
+        }
+        h1 { font-weight: 300; color: #222; margin-bottom: 40px; }
+        .rate-card {
+            display: flex;
+            justify-content: space-between;
+            background: #f4f7f9;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+        .rate-card:hover { transform: scale(1.02); }
+        .city-info { text-align: left; }
+        .city-name { font-weight: bold; display: block; }
+        .days { font-size: 12px; color: #888; }
+        .price { font-weight: bold; color: #333; align-self: center; }
+        
+        .wa-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: #25D366;
+            color: white;
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
+        }
+        .back-link { display: block; margin-top: 25px; color: #bbb; text-decoration: none; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+    <div class="policy-box">
+        <span class="brand-logo">Comfy Clouds</span>
+        <h1>Delivery & Shipping</h1>
+
+        <div class="rate-card">
+            <div class="city-info">
+                <span class="city-name">Cairo</span>
+                <span class="days">3-4 Business Days</span>
+            </div>
+            <span class="price">35 EGP</span>
+        </div>
+        <div class="rate-card">
+            <div class="city-info">
+                <span class="city-name">Giza</span>
+                <span class="days">4-5 Business Days</span>
+            </div>
+            <span class="price">60 EGP</span>
+        </div>
+
+        <div class="rate-card">
+            <div class="city-info">
+                <span class="city-name">Alexandria</span>
+                <span class="days">4-5 Business Days</span>
+            </div>
+            <span class="price">60 EGP</span>
+        </div>
+
+        <p style="color: #666; font-size: 14px; margin: 30px 0;">We’re committed to getting your order to you as fast as possible.</p>
+
+        <a href="https://wa.me/201097530461" class="wa-link">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="" width="20">
+            Chat with us on WhatsApp
+        </a>
+
+        <a href="../" class="back-link">Back to Home</a>
+    </div>
+
+</body>
+</html>
