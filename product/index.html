@@ -3,291 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product | Comfy Clouds 😶‍🌫️☁️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Comfy Clouds</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { 
             --sky-blue: #64b5f6;
             --soft-pink: #f06292; 
+            --cloud-white: rgba(255, 255, 255, 0.5);
             --text: #4a4a4a; 
-            --cloud-white: rgba(255, 255, 255, 0.6);
-            --success-green: #81c784;
         }
 
         body { 
             background: linear-gradient(-45deg, #e3f2fd, #fce4ec, #ffffff, #bbdefb);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
-            font-family: 'Poppins', sans-serif; color: var(--text); margin: 0; min-height: 100vh; padding-bottom: 50px;
-        }
-        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-
-        .nav-links { max-width: 1000px; margin: 20px auto 10px; display: flex; justify-content: space-between; padding: 0 15px; }
-        .nav-links a { text-decoration: none; color: var(--sky-blue); font-weight: 700; background: white; padding: 8px 20px; border-radius: 50px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; }
-
-        .product-container { 
-            max-width: 1050px; margin: 20px auto 60px; 
-            background: var(--cloud-white); backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.8); border-radius: 50px; 
-            display: flex; flex-wrap: wrap; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.05); 
+            font-family: 'Poppins', sans-serif; 
+            color: var(--text); 
+            margin: 0; padding: 0; min-height: 100vh; 
         }
 
-        .product-imgs { flex: 1.1; min-width: 320px; background: #fff; padding: 20px; }
-        .main-img-wrap { width: 100%; border-radius: 40px; overflow: hidden; cursor: zoom-in; }
-        .main-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
-        .main-img-wrap:hover .main-img { transform: scale(1.15); }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-        .thumb-nav { display: flex; gap: 10px; margin-top: 15px; justify-content: center; overflow-x: auto; padding: 5px; }
-        .thumb { width: 65px; height: 65px; border-radius: 12px; cursor: pointer; border: 2px solid transparent; transition: 0.2s; object-fit: cover; background: #f9f9f9; }
-        .thumb.active { border-color: var(--sky-blue); }
+        header { 
+            text-align: center; 
+            padding: 40px 20px; 
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.4);
+        }
 
-        .product-info { flex: 1; min-width: 320px; padding: 45px; }
-        .product-info h1 { font-family: 'Quicksand', sans-serif; font-weight: 700; color: #333; margin: 0; font-size: 2.2rem; }
-        .price { font-size: 2rem; color: var(--sky-blue); font-weight: 800; margin: 10px 0; }
-        .mat-label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--sky-blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 15px; }
+        .brand-link { text-decoration: none; display: inline-block; }
 
-        .size-grid { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
-        .size-btn { border: 1px solid rgba(100, 181, 246, 0.2); background: white; padding: 14px 22px; border-radius: 18px; cursor: pointer; font-weight: 600; transition: 0.3s; }
-        .size-btn.active { background: var(--sky-blue); color: white; border-color: var(--sky-blue); }
+        header h1 { 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem; font-weight: 900;
+            text-transform: uppercase;
+            margin: 0; letter-spacing: 1px;
+            background: linear-gradient(to right, #e8aeff 0%, #ffbcfc 25%, #cff1ff 50%, #ffffff 75%, #87CEEB 100%);
+            background-size: 200% auto;
+            animation: cloudMove 8s linear infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            -webkit-text-stroke: 0.5px rgba(135, 206, 235, 0.3);
+        }
+
+        @keyframes cloudMove {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .product-container {
+            max-width: 1100px;
+            margin: 60px auto;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(20px);
+            border-radius: 40px;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+        }
+
+        .product-images { display: flex; flex-direction: column; gap: 20px; }
+        #main-img { width: 100%; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: 0.3s; }
+        .thumb-row { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+        .thumb-row::-webkit-scrollbar { display: none; }
+        .thumb { width: 85px; height: 85px; border-radius: 18px; cursor: pointer; object-fit: cover; border: 2px solid transparent; transition: 0.3s; flex-shrink: 0; background: white; }
+        .thumb.active { border-color: var(--sky-blue); transform: scale(1.05); }
+
+        .product-details { padding: 10px; }
+        .product-details h2 { font-family: 'Montserrat', sans-serif; font-size: 2.5rem; margin-top: 0; color: var(--text); }
+        .price-row { font-size: 1.8rem; margin: 25px 0; font-weight: 700; color: var(--sky-blue); display: flex; align-items: center; gap: 15px; }
+        .old-price { text-decoration: line-through; color: #bbb; font-size: 1.3rem; font-weight: 400; }
+        .description { line-height: 1.7; color: #666; margin-bottom: 35px; font-size: 1.05rem; }
+
+        .size-selector { margin: 35px 0; }
+        .size-selector label { font-weight: 700; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; color: #888; }
+        .size-options { display: flex; gap: 12px; margin-top: 15px; flex-wrap: wrap; }
+        .size-btn { 
+            padding: 12px 25px; border: 2px solid white; background: rgba(255,255,255,0.5);
+            border-radius: 18px; cursor: pointer; font-weight: 600; transition: 0.3s; font-family: 'Poppins', sans-serif;
+        }
+        .size-btn:hover { background: white; border-color: var(--sky-blue); }
+        .size-btn.active { background: var(--sky-blue); color: white; border-color: var(--sky-blue); box-shadow: 0 8px 15px rgba(100, 181, 246, 0.3); }
+
+        .add-btn {
+            width: 100%; padding: 20px; border: none; border-radius: 25px;
+            background: var(--sky-blue); color: white; font-size: 1.2rem;
+            font-weight: 700; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 12px 25px rgba(100, 181, 246, 0.3); font-family: 'Poppins', sans-serif;
+        }
+        .add-btn:hover { transform: translateY(-4px); box-shadow: 0 18px 30px rgba(100, 181, 246, 0.4); }
+        .add-btn:active { transform: translateY(-1px); }
+
+        /* FOOTER STYLES */
+        .footer-wave-container { line-height: 0; width: 100%; margin-top: 50px; }
+        .cloud-wave-svg { position: relative; display: block; width: calc(100% + 1.3px); height: 70px; }
+        .cloud-wave-svg .shape-fill { fill: rgba(255, 255, 255, 0.4); }
         
-        #stock-warn { color: var(--soft-pink); font-size: 0.85rem; font-weight: 700; margin-bottom: 20px; height: 1.2rem; }
-
-        .qty-box { display: flex; align-items: center; gap: 20px; margin-bottom: 35px; background: rgba(255,255,255,0.5); width: fit-content; padding: 10px 20px; border-radius: 50px; }
-        .qty-btn { width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer; background: white; font-weight: 700; }
-
-        .btn-stack { display: flex; flex-direction: column; gap: 12px; }
-        .add-btn { 
-            position: relative; width: 100%; height: 65px; border-radius: 50px; border: none; 
-            background: var(--sky-blue); color: white; font-weight: 800; 
-            font-size: 1rem; text-transform: uppercase; cursor: pointer; 
-            overflow: hidden; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        .cloud-footer {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(15px);
+            padding: 40px 20px 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.5);
         }
-        .btn-content { position: absolute; width: 100%; height: 100%; top: 0; left: 0; display: flex; align-items: center; justify-content: center; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .btn-icon { transform: translateY(100%); font-size: 1.8rem; }
-        .add-btn.success { background: var(--success-green); }
-        .add-btn.success .btn-text { transform: translateY(-100%); opacity: 0; }
-        .add-btn.success .btn-icon { transform: translateY(0); }
-
-        .buy-btn { width: 100%; padding: 20px; border-radius: 50px; border: 2px solid var(--sky-blue); background: transparent; color: var(--sky-blue); font-weight: 800; font-size: 1rem; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
-
-        .related-section { max-width: 1050px; margin: 40px auto; padding: 0 15px; }
-        .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-        .related-card { 
-            background: white; padding: 15px; border-radius: 30px; text-decoration: none; color: inherit; 
-            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1); 
-            border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            gap: 40px;
         }
-        .related-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); border-color: var(--sky-blue); }
-        .related-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 20px; margin-bottom: 12px; }
+        .footer-brand h2 { font-family: 'Montserrat', sans-serif; color: var(--sky-blue); margin-bottom: 10px; }
+        .footer-links h4 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text); opacity: 0.7; margin-bottom: 20px; }
+        .footer-links a { 
+            display: block; text-decoration: none; color: var(--sky-blue); 
+            font-weight: 600; margin-bottom: 12px; font-size: 0.9rem;
+            cursor: pointer; transition: 0.2s;
+        }
+        .footer-links a:hover { color: var(--soft-pink); }
+        .social-pills { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
+        .pill {
+            background: white; padding: 10px 20px; border-radius: 30px;
+            text-decoration: none; color: var(--sky-blue); font-weight: 700;
+            font-size: 0.85rem; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: 0.3s; border: none; cursor: pointer;
+        }
+        .pill:hover { transform: translateY(-5px); background: var(--sky-blue); color: white; }
+        .footer-copyright { text-align: center; margin-top: 40px; font-size: 0.75rem; opacity: 0.5; }
 
-        #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; }
-        .cloud-toast { background: white; padding: 15px 30px; border-radius: 50px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); font-weight: 600; margin-bottom: 10px; animation: slideDown 0.5s ease forwards; }
-        @keyframes slideDown { 0% { transform: translateY(-50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+        @media (max-width: 768px) {
+            .product-container { grid-template-columns: 1fr; margin: 20px; padding: 25px; gap: 30px; }
+            .product-details h2 { font-size: 1.8rem; }
+            header h1 { font-size: 1.8rem; }
+            .footer-content { grid-template-columns: 1fr; gap: 30px; }
+        }
 
-        @media (max-width: 768px) { .related-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; } }
+        #toast {
+            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+            background: white; color: var(--sky-blue); padding: 15px 35px;
+            border-radius: 50px; font-weight: 700; box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            display: none; z-index: 2000; border: 2px solid var(--sky-blue);
+        }
     </style>
 </head>
 <body>
 
-    <div class="nav-links">
-        <a href="../main/">← Back to Shop</a>
-        <a href="../checkout/">View Bag 🛒</a>
-    </div>
+    <header>
+        <a href="../" class="brand-link"><h1>Comfy Clouds</h1></a>
+    </header>
 
-    <div id="toast-container"></div>
-
-    <div id="content" class="product-container" style="display:none;">
-        <div class="product-imgs">
-            <div class="main-img-wrap"><img id="p-img" class="main-img"></div>
-            <div id="thumb-container" class="thumb-nav"></div>
+    <div class="product-container">
+        <div class="product-images">
+            <img id="main-img" src="" alt="Product">
+            <div class="thumb-row" id="thumb-row"></div>
         </div>
-
-        <div class="product-info">
-            <h1 id="p-name">Loading...</h1>
-            <div id="p-price" class="price"></div>
-            <span id="p-material" class="mat-label"></span>
-            <p id="p-desc" style="font-size: 0.95rem; line-height: 1.6; color: #666; margin-bottom: 25px;"></p>
-
-            <p style="font-weight: 700; margin-bottom: 10px;">Select Size:</p>
-            <div id="size-options" class="size-grid"></div>
+        <div class="product-details">
+            <h2 id="p-name">Loading...</h2>
+            <div class="price-row" id="p-price"></div>
+            <p class="description" id="p-desc">Extra soft and breathable, perfect for your daily comfort.</p>
             
-            <div id="stock-warn"></div>
-            
-            <div class="qty-box">
-                <button class="qty-btn" onclick="updateQty(-1)">-</button>
-                <b id="qty-val">1</b>
-                <button class="qty-btn" onclick="updateQty(1)">+</button>
+            <div class="size-selector">
+                <label>Choose your size</label>
+                <div class="size-options" id="size-options"></div>
             </div>
 
-            <div class="btn-stack">
-                <button class="add-btn" id="add-btn" onclick="handleAddToCart()">
-                    <div class="btn-content btn-text">ADD TO BAG 🛒</div>
-                    <div class="btn-content btn-icon">✓</div>
-                </button>
-                <button class="buy-btn" onclick="buyNow()">BUY IT NOW ✨</button>
-            </div>
+            <button class="add-btn" onclick="addToBag()">Add to Bag ☁️</button>
         </div>
     </div>
 
-    <div class="related-section" id="related-section" style="display:none;">
-        <h2 style="font-family: 'Quicksand'; margin-bottom: 25px;">☁️ You may also like:</h2>
-        <div id="related-grid" class="related-grid"></div>
+    <div class="footer-wave-container">
+        <svg class="cloud-wave-svg" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C57.23,103.19,114.49,107.41,172,104.57c61.42-3,121.24-11.88,172.63-23.33Z" class="shape-fill"></path>
+        </svg>
     </div>
+
+    <footer class="cloud-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>Comfy Clouds ☁️</h2>
+                <p>Your daily dose of comfort.</p>
+                <div class="social-pills">
+                    <a href="https://www.instagram.com/comfy_clouds_/" target="_blank" class="pill">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </a>
+                    <a href="https://www.tiktok.com/@comfy_clouds_" target="_blank" class="pill">
+                        <i class="fab fa-tiktok"></i> TikTok
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <h4>Shop</h4>
+                <a href="../">All Products</a>
+            </div>
+
+            <div class="footer-links">
+                <h4>Support</h4>
+                <a href="../shipping/">Delivery & Shipping</a>
+                <a href="../refunds/">Refund Policy</a>
+                <a href="../terms/">Terms of Service</a>
+                <a href="../privacy/">Privacy Policy</a>
+            </div>
+        </div>
+
+        <div class="footer-copyright">
+            <p>© 2026 Comfy Clouds | Made in Egypt 🇪🇬</p>
+        </div>
+    </footer>
+
+    <div id="toast">Added to your clouds! ☁️</div>
 
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsc-LQJwIFX_LVhHd2olYG9RJ-1Ln3RSxWXnAntQFBDkgWzApnuoT68uPFE9cK8pc2OQ/exec";
-        const urlParams = new URLSearchParams(window.location.search);
-        const productID = urlParams.get('id');
-        
         let currentProduct = null;
         let selectedSize = null;
-        let currentQty = 1;
-        let availableStock = 0;
 
-        async function loadProduct() {
+        async function initProduct() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
             try {
-                const res = await fetch(SCRIPT_URL);
-                const data = await res.json();
-                currentProduct = data.find(p => String(p.ID) === productID);
-                if (!currentProduct) return;
-                
-                document.getElementById('content').style.display = 'flex';
-                document.getElementById('related-section').style.display = 'block';
-                
-                document.getElementById('p-name').innerText = currentProduct.Name;
-                document.getElementById('p-price').innerText = (currentProduct["Sale Price"] || currentProduct.Price) + " EGP";
-                document.getElementById('p-material').innerText = currentProduct.Material ? `✨ ${currentProduct.Material}` : "";
-                document.getElementById('p-desc').innerText = currentProduct.Description || "Extra soft and perfect for your daily comfort.";
+                const response = await fetch(SCRIPT_URL);
+                const data = await response.json();
+                currentProduct = data.find(p => String(p.ID) === productId);
 
-                const imgList = currentProduct.Img.split(',');
-                document.getElementById('p-img').src = imgList[0].trim();
-
-                const thumbContainer = document.getElementById('thumb-container');
-                imgList.forEach((url, index) => {
-                    const img = document.createElement('img');
-                    img.src = url.trim();
-                    img.className = `thumb ${index === 0 ? 'active' : ''}`;
-                    img.onclick = () => {
-                        document.getElementById('p-img').src = url.trim();
-                        document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
-                        img.classList.add('active');
-                    };
-                    thumbContainer.appendChild(img);
-                });
-
-                const container = document.getElementById('size-options');
-                const cat = String(currentProduct.Category).toUpperCase();
-                const gen = String(currentProduct.Gender).toUpperCase();
-                let sizes = (cat.includes("SHOE")) 
-                    ? (gen === "MALE" ? ["39", "40", "41", "42", "43", "44", "45"] : ["36", "37", "38", "39", "40", "41"])
-                    : (gen === "FEMALE" ? ["S", "M", "L", "XL"] : ["S", "M", "L", "XL", "XXL"]);
-
-                sizes.forEach(sz => {
-                    const stockValue = parseInt(currentProduct[sz]) || 0;
-                    const btn = document.createElement('button');
-                    btn.className = 'size-btn';
-                    btn.innerText = sz;
-                    if (stockValue <= 0) btn.disabled = true;
-                    else {
-                        btn.onclick = () => {
-                            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-                            btn.classList.add('active');
-                            selectedSize = sz;
-                            availableStock = stockValue;
-                            const warn = document.getElementById('stock-warn');
-                            warn.innerText = availableStock < 5 ? `🔥 Only ${availableStock} left!` : "";
-                            currentQty = 1;
-                            document.getElementById('qty-val').innerText = 1;
-                        };
-                    }
-                    container.appendChild(btn);
-                });
-
-                loadRelated(data, currentProduct.Category);
-            } catch (e) { console.log(e); }
-        }
-
-        function handleAddToCart() {
-            if (!selectedSize) return showToast("Please select a size first!");
-            addToCartLogic();
-            const btn = document.getElementById('add-btn');
-            btn.classList.add('success');
-            setTimeout(() => btn.classList.remove('success'), 2000);
-        }
-
-        function addToCartLogic() {
-            let cart = JSON.parse(localStorage.getItem('comfy_cart')) || [];
-            const existingItem = cart.find(item => 
-                item.Name === currentProduct.Name && item.Size === selectedSize
-            );
-
-            if (existingItem) {
-                let newQty = existingItem.Qty + currentQty;
-                if (newQty <= availableStock) {
-                    existingItem.Qty = newQty;
+                if (currentProduct) {
+                    render(currentProduct);
                 } else {
-                    existingItem.Qty = availableStock;
-                    showToast("Maximum stock reached for this size!");
+                    document.getElementById('p-name').innerText = "Product not found 🌧️";
                 }
-            } else {
-                cart.push({
-                    cartId: Date.now(),
-                    Name: currentProduct.Name,
-                    Size: selectedSize,
-                    Qty: currentQty,
-                    MaxStock: availableStock,
-                    Price: parseFloat(currentProduct["Sale Price"] || currentProduct.Price),
-                    Img: document.getElementById('p-img').src
-                });
+            } catch (err) {
+                console.error("Error:", err);
             }
-            localStorage.setItem('comfy_cart', JSON.stringify(cart));
         }
 
-        function loadRelated(all, cat) {
-            const grid = document.getElementById('related-grid');
-            let sameCat = all.filter(p => p.Category === cat && String(p.ID) !== productID);
-            let diffCat = all.filter(p => p.Category !== cat && String(p.ID) !== productID);
-            sameCat.sort(() => 0.5 - Math.random());
-            diffCat.sort(() => 0.5 - Math.random());
-            let finalSelection = [...sameCat, ...diffCat].slice(0, 4);
+        function render(p) {
+            document.getElementById('p-name').innerText = p.Name;
+            
+            const isSale = p["Sale Price"] && p["Sale Price"] < p.Price;
+            document.getElementById('p-price').innerHTML = isSale ? 
+                `<span class="old-price">${p.Price} EGP</span><span>${p["Sale Price"]} EGP</span>` : 
+                `${p.Price} EGP`;
 
-            finalSelection.forEach(p => {
-                // UPDATED LINK TO FOLDER METHOD
-                grid.innerHTML += `
-                    <a href="../product/?id=${p.ID}" class="related-card">
-                        <img src="${p.Img.split(',')[0].trim()}">
-                        <h3>${p.Name}</h3>
-                        <p style="color:var(--sky-blue); font-weight:700;">${p.Price} EGP</p>
-                    </a>`;
+            const imgs = p.Img.split(',').map(i => i.trim());
+            const mainImg = document.getElementById('main-img');
+            mainImg.src = imgs[0];
+
+            const thumbRow = document.getElementById('thumb-row');
+            imgs.forEach((src, idx) => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.className = idx === 0 ? 'thumb active' : 'thumb';
+                img.onclick = () => {
+                    mainImg.src = src;
+                    document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+                    img.classList.add('active');
+                };
+                thumbRow.appendChild(img);
+            });
+
+            const sizes = String(p.Size).split(' ');
+            const sizeOptions = document.getElementById('size-options');
+            sizes.forEach(s => {
+                const btn = document.createElement('button');
+                btn.className = 'size-btn';
+                btn.innerText = s;
+                btn.onclick = () => {
+                    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    selectedSize = s;
+                };
+                sizeOptions.appendChild(btn);
             });
         }
 
-        function updateQty(n) {
-            if (!selectedSize) return;
-            let next = currentQty + n;
-            if (next >= 1 && next <= availableStock) {
-                currentQty = next;
-                document.getElementById('qty-val').innerText = currentQty;
+        function addToBag() {
+            if (!selectedSize) {
+                alert("Please select a size! ✨");
+                return;
             }
+            const cart = JSON.parse(localStorage.getItem('comfy_cart')) || [];
+            cart.push({
+                id: currentProduct.ID,
+                name: currentProduct.Name,
+                price: currentProduct["Sale Price"] || currentProduct.Price,
+                size: selectedSize,
+                img: currentProduct.Img.split(',')[0]
+            });
+            localStorage.setItem('comfy_cart', JSON.stringify(cart));
+            
+            const toast = document.getElementById('toast');
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 3000);
         }
 
-        function buyNow() {
-            if (!selectedSize) return showToast("Please select a size first!");
-            handleAddToCart();
-            window.location.href = "../checkout/";
-        }
-
-        function showToast(msg) {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = 'cloud-toast';
-            toast.innerText = msg;
-            container.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
-
-        loadProduct();
+        initProduct();
     </script>
 </body>
-
 </html>
