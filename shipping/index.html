@@ -4,107 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shipping & Delivery | Comfy Clouds</title>
-    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
-            background-color: #f9fbfd;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        body { 
+            background: linear-gradient(-45deg, #e3f2fd, #fce4ec, #ffffff, #bbdefb);
+            background-size: 400% 400%;
+            font-family: 'Poppins', sans-serif; 
+            color: #4a4a4a; 
+            margin: 0; padding: 40px 20px;
+            display: flex; justify-content: center; align-items: center;
             min-height: 100vh;
-            margin: 0;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
-        .policy-box {
-            background: white;
-            padding: 50px;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        .policy-container {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(15px);
             max-width: 600px;
-            width: 90%;
+            width: 100%;
+            padding: 40px;
+            border-radius: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             text-align: center;
         }
-        .brand-logo {
-            font-size: 14px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: #b5b5b5;
-            margin-bottom: 10px;
-            display: block;
+        h1 { 
+            font-family: 'Montserrat', sans-serif; 
+            text-transform: uppercase; 
+            color: #64b5f6;
+            margin-bottom: 30px;
         }
-        h1 { font-weight: 300; color: #222; margin-bottom: 40px; }
         .rate-card {
             display: flex;
             justify-content: space-between;
-            background: #f4f7f9;
-            padding: 20px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 20px 25px;
             border-radius: 20px;
             margin-bottom: 15px;
             transition: 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
-        .rate-card:hover { transform: scale(1.02); }
+        .rate-card:hover { transform: scale(1.02); background: white; }
         .city-info { text-align: left; }
-        .city-name { font-weight: bold; display: block; }
-        .days { font-size: 12px; color: #888; }
-        .price { font-weight: bold; color: #333; align-self: center; }
+        .city-name { font-weight: 700; display: block; color: #4a4a4a; }
+        .days { font-size: 0.8rem; color: #888; }
+        .price { font-weight: 700; color: #f06292; font-size: 1.1rem; }
         
+        .contact-box { 
+            margin-top: 40px; 
+            padding-top: 20px; 
+            border-top: 1px solid rgba(255,255,255,0.5);
+        }
         .wa-link {
             display: inline-flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             background: #25D366;
             color: white;
-            padding: 15px 35px;
+            padding: 12px 30px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
-            margin-top: 30px;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
+            margin-top: 10px;
+            transition: 0.3s;
         }
-        .back-link { display: block; margin-top: 25px; color: #bbb; text-decoration: none; font-size: 13px; }
+        .wa-link:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3); }
+        .back-home {
+            display: block; text-align: center; margin-top: 30px;
+            color: #aaa; text-decoration: none; font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
 
-    <div class="policy-box">
-        <span class="brand-logo">Comfy Clouds</span>
-        <h1>Delivery & Shipping</h1>
+<div class="policy-container">
+    <span style="font-size: 0.8rem; letter-spacing: 2px; color: #aaa; text-transform: uppercase;">Comfy Clouds</span>
+    <h1>Delivery & Shipping</h1>
 
-        <div class="rate-card">
-            <div class="city-info">
-                <span class="city-name">Cairo</span>
-                <span class="days">3-4 Business Days</span>
-            </div>
-            <span class="price">35 EGP</span>
+    <div class="rate-card">
+        <div class="city-info">
+            <span class="city-name">Cairo</span>
+            <span class="days">3-4 Business Days</span>
         </div>
-        <div class="rate-card">
-            <div class="city-info">
-                <span class="city-name">Giza</span>
-                <span class="days">4-5 Business Days</span>
-            </div>
-            <span class="price">60 EGP</span>
-        </div>
-
-        <div class="rate-card">
-            <div class="city-info">
-                <span class="city-name">Alexandria</span>
-                <span class="days">4-5 Business Days</span>
-            </div>
-            <span class="price">60 EGP</span>
-        </div>
-
-        <p style="color: #666; font-size: 14px; margin: 30px 0;">We’re committed to getting your order to you as fast as possible.</p>
-
-        <a href="https://wa.me/201097530461" class="wa-link">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="" width="20">
-            Chat with us on WhatsApp
-        </a>
-
-        <a href="../main/" class="back-link">Back to Home</a>
+        <span class="price">35 EGP</span>
     </div>
 
+    <div class="rate-card">
+        <div class="city-info">
+            <span class="city-name">Giza</span>
+            <span class="days">4-5 Business Days</span>
+        </div>
+        <span class="price">60 EGP</span>
+    </div>
+
+    <div class="rate-card">
+        <div class="city-info">
+            <span class="city-name">Alexandria</span>
+            <span class="days">4-5 Business Days</span>
+        </div>
+        <span class="price">60 EGP</span>
+    </div>
+
+    <p style="color: #777; font-size: 0.9rem; margin: 30px 0;">We’re committed to getting your order to you as fast as possible.</p>
+
+    <div class="contact-box">
+        <a href="https://wa.me/201097530461" class="wa-link">
+            <i class="fab fa-whatsapp"></i> Chat with us
+        </a>
+    </div>
+
+    <a href="../main/" class="back-home">← Back to Home</a>
+</div>
+
 </body>
-
 </html>
-
-
