@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout | Comfy Clouds 😶‍🌫️☁️</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { 
             --sky-blue: #64b5f6;
@@ -20,7 +21,7 @@
             animation: gradientBG 15s ease infinite;
             font-family: 'Poppins', sans-serif; 
             color: var(--text); 
-            margin: 0; padding: 20px; min-height: 100vh; 
+            margin: 0; padding: 0; min-height: 100vh; 
         }
 
         @keyframes gradientBG {
@@ -106,6 +107,64 @@
             transform: none !important;
             box-shadow: none !important;
         }
+
+        .footer-wave-container { line-height: 0; width: 100%; margin-top: 50px; }
+        .cloud-wave-svg { position: relative; display: block; width: calc(100% + 1.3px); height: 70px; }
+        .cloud-wave-svg .shape-fill { fill: rgba(255, 255, 255, 0.4); }
+        
+        .cloud-footer {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(15px);
+            padding: 40px 20px 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            gap: 40px;
+        }
+        .footer-brand h2 { font-family: 'Montserrat', sans-serif; color: var(--sky-blue); margin-bottom: 10px; }
+        .footer-links h4 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text); opacity: 0.7; margin-bottom: 20px; }
+        .footer-links a { 
+            display: block; text-decoration: none; color: var(--sky-blue); 
+            font-weight: 600; margin-bottom: 12px; font-size: 0.9rem;
+            cursor: pointer; transition: 0.2s;
+        }
+        .footer-links a:hover { color: var(--soft-pink); }
+        .social-pills { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
+        .pill {
+            background: white; padding: 10px 20px; border-radius: 30px;
+            text-decoration: none; color: var(--sky-blue); font-weight: 700;
+            font-size: 0.85rem; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: 0.3s; border: none; cursor: pointer;
+        }
+        .pill:hover { transform: translateY(-5px); background: var(--sky-blue); color: white; }
+        .footer-copyright { text-align: center; margin-top: 40px; font-size: 0.75rem; opacity: 0.5; }
+
+        .back-to-top {
+            position: fixed; bottom: 30px; right: 35px;
+            background: white; color: var(--sky-blue);
+            width: 55px; height: 40px; border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer; z-index: 2000; opacity: 0; visibility: hidden;
+            transition: 0.4s ease;
+            animation: cloudHover 3s ease-in-out infinite;
+        }
+        .back-to-top.visible { opacity: 1; visibility: visible; }
+        
+        @keyframes cloudHover {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @media (max-width: 768px) {
+            .footer-content { grid-template-columns: 1fr; gap: 30px; }
+            .checkout-container { margin: 20px; padding: 25px; }
+        }
     </style>
 </head>
 <body>
@@ -139,12 +198,76 @@
         <button class="order-btn" id="submit-order-btn" onclick="placeOrder()">COMPLETE ORDER</button>
     </div>
 
+    <div class="footer-wave-container">
+        <svg class="cloud-wave-svg" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C57.23,103.19,114.49,107.41,172,104.57c61.42-3,121.24-11.88,172.63-23.33Z" class="shape-fill"></path>
+        </svg>
+    </div>
+
+    <footer class="cloud-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>Comfy Clouds ☁️</h2>
+                <p>Your daily dose of comfort.</p>
+                <div class="social-pills">
+                    <a href="https://www.instagram.com/comfy_clouds_/" target="_blank" class="pill">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </a>
+                    <a href="https://www.tiktok.com/@comfy_clouds_" target="_blank" class="pill">
+                        <i class="fab fa-tiktok"></i> TikTok
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <h4>Shop Men</h4>
+                <a href="../main/">T-Shirts</a>
+                <a href="../main/">Pants</a>
+                <a href="../main/">PJS</a>
+                <a href="../main/">View All</a>
+            </div>
+
+            <div class="footer-links">
+                <h4>Shop Women</h4>
+                <a href="../main/">Tops</a>
+                <a href="../main/">Pants</a>
+                <a href="../main/">PJS</a>
+                <a href="../main/">View All</a>
+            </div>
+
+            <div class="footer-links">
+                <h4>Support</h4>
+                <a href="../shipping/">Delivery & Shipping</a>
+                <a href="../refunds/">Refund Policy</a>
+                <a href="../terms/">Terms of Service</a>
+                <a href="../privacy/">Privacy Policy</a>
+            </div>
+        </div>
+
+        <div class="footer-copyright">
+            <p>© 2026 Comfy Clouds | Made in Egypt 🇪🇬</p>
+        </div>
+    </footer>
+
+    <div class="back-to-top" id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <i class="fas fa-chevron-up"></i>
+    </div>
+
     <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxOZKl6cH1Fh3L_wJ9qX5SbD5Y5cSzpMmt3qRWiR_MJL-gQRNjWSxRDet0Nh4Eok4SXdA/exec";
     
     let cart = JSON.parse(localStorage.getItem('comfy_cart')) || [];
     let discountRate = 0;
     let LIVE_PROMOS = {};
+
+    window.onscroll = function() {
+        const btn = document.getElementById('backToTop');
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            btn.classList.add('visible');
+        } else {
+            btn.classList.remove('visible');
+        }
+    };
 
     function showToast(msg) {
         const container = document.getElementById('toast-container');
@@ -190,11 +313,9 @@
         const item = cart[index];
         const newQty = item.Qty + n;
 
-        if (n === 1) { 
-            if (item.MaxStock && item.Qty >= item.MaxStock) {
-                showToast(`Only ${item.MaxStock} available in stock! ☁️`);
-                return;
-            }
+        if (n === 1 && item.MaxStock && item.Qty >= item.MaxStock) {
+            showToast(`Only ${item.MaxStock} available in stock! ☁️`);
+            return;
         }
 
         if (newQty > 0) {
@@ -271,7 +392,6 @@
         const itemsList = cart.map(i => `- ${i.Qty}x ${i.Name} (${i.Size})`).join('\n');
 
         try {
-            // Updated payload to match your required log format
             await fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -281,7 +401,6 @@
 
             setTimeout(() => {
                 localStorage.removeItem('comfy_cart');
-                // UPDATED REDIRECTION
                 window.location.href = "../thank-you/";
             }, 1000);
 
