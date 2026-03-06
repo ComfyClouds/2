@@ -19,12 +19,10 @@
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             font-family: 'Poppins', sans-serif; color: var(--text); margin: 0; min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        .nav-links { max-width: 1000px; margin: 20px auto 10px; display: flex; justify-content: space-between; padding: 0 15px; width: 100%; box-sizing: border-box; }
+        .nav-links { max-width: 1000px; margin: 20px auto 10px; display: flex; justify-content: space-between; padding: 0 15px; }
         .nav-links a { text-decoration: none; color: var(--sky-blue); font-weight: 700; background: white; padding: 8px 20px; border-radius: 50px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; }
 
         .product-container { 
@@ -72,7 +70,7 @@
 
         .buy-btn { width: 100%; padding: 20px; border-radius: 50px; border: 2px solid var(--sky-blue); background: transparent; color: var(--sky-blue); font-weight: 800; font-size: 1rem; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
 
-        .related-section { max-width: 1050px; margin: 40px auto; padding: 0 15px; flex-grow: 1; }
+        .related-section { max-width: 1050px; margin: 40px auto; padding: 0 15px; }
         .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
         .related-card { 
             background: white; padding: 15px; border-radius: 30px; text-decoration: none; color: inherit; 
@@ -82,34 +80,24 @@
         .related-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); border-color: var(--sky-blue); }
         .related-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 20px; margin-bottom: 12px; }
 
+        /* FOOTER STYLES */
+        footer { 
+            background: var(--cloud-white); backdrop-filter: blur(15px); 
+            padding: 40px 20px; margin-top: 60px; border-top: 1px solid rgba(255,255,255,0.5); 
+            text-align: center; border-radius: 50px 50px 0 0;
+        }
+        .footer-content { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+        .footer-logo { font-family: 'Quicksand'; font-size: 1.5rem; font-weight: 700; color: var(--sky-blue); }
+        .footer-links { display: flex; justify-content: center; gap: 30px; }
+        .footer-links a { text-decoration: none; color: var(--text); font-weight: 600; font-size: 0.9rem; transition: 0.3s; }
+        .footer-links a:hover { color: var(--sky-blue); }
+        .copyright { font-size: 0.8rem; color: #888; margin-top: 10px; }
+
         #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; }
         .cloud-toast { background: white; padding: 15px 30px; border-radius: 50px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); font-weight: 600; margin-bottom: 10px; animation: slideDown 0.5s ease forwards; }
         @keyframes slideDown { 0% { transform: translateY(-50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
 
-        /* FOOTER STYLES */
-        .footer-wave { line-height: 0; margin-top: 50px; }
-        .footer-wave svg { width: 100%; height: 100px; fill: rgba(255, 255, 255, 0.8); }
-        footer { 
-            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); 
-            padding: 40px 20px; border-top: 1px solid rgba(255,255,255,0.3);
-        }
-        .footer-grid { 
-            max-width: 1100px; margin: 0 auto; display: grid; 
-            grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px;
-        }
-        .footer-col h4 { font-family: 'Quicksand'; margin-bottom: 20px; color: var(--sky-blue); }
-        .footer-col ul { list-style: none; padding: 0; }
-        .footer-col li { margin-bottom: 10px; }
-        .footer-col a { text-decoration: none; color: #777; font-size: 0.9rem; transition: 0.3s; }
-        .footer-col a:hover { color: var(--sky-blue); padding-left: 5px; }
-        .social-links { display: flex; gap: 15px; margin-top: 15px; }
-        .social-links a { font-size: 1.2rem; text-decoration: none; }
-        .copyright { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.05); color: #999; font-size: 0.8rem; }
-
-        @media (max-width: 768px) { 
-            .footer-grid { grid-template-columns: 1fr 1fr; }
-            .related-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; } 
-        }
+        @media (max-width: 768px) { .related-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; } .footer-links { gap: 15px; flex-wrap: wrap; } }
     </style>
 </head>
 <body>
@@ -159,46 +147,16 @@
         <div id="related-grid" class="related-grid"></div>
     </div>
 
-    <div class="footer-wave">
-        <svg viewBox="0 0 1440 320"><path d="M0,160L48,176C96,192,192,224,288,224C384,224,480,192,576,165.3C672,139,768,117,864,128C960,139,1056,181,1152,186.7C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>
-    </div>
     <footer>
-        <div class="footer-grid">
-            <div class="footer-col">
-                <h2 style="font-family:'Quicksand'; color:var(--sky-blue); margin-top:0;">Comfy Clouds ☁️</h2>
-                <p style="font-size:0.85rem; color:#888;">Bringing the softest touch to your daily life. Made with love in Egypt.</p>
-                <div class="social-links">
-                    <a href="#">📸 Instagram</a>
-                    <a href="#">🎵 TikTok</a>
-                </div>
+        <div class="footer-content">
+            <div class="footer-logo">Comfy Clouds 😶‍🌫️☁️</div>
+            <div class="footer-links">
+                <a href="../main/">Shop</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Shipping Info</a>
+                <a href="#">Contact Us</a>
             </div>
-            <div class="footer-col">
-                <h4>Shop Men</h4>
-                <ul>
-                    <li><a href="../main/?gender=male&cat=tshirt">T-Shirts</a></li>
-                    <li><a href="../main/?gender=male&cat=pants">Pants</a></li>
-                    <li><a href="../main/?gender=male&cat=pjs">PJS</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Shop Women</h4>
-                <ul>
-                    <li><a href="../main/?gender=female&cat=tshirt">T-Shirts</a></li>
-                    <li><a href="../main/?gender=female&cat=pants">Pants</a></li>
-                    <li><a href="../main/?gender=female&cat=pjs">PJS</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Support</h4>
-                <ul>
-                    <li><a href="#">Shipping</a></li>
-                    <li><a href="#">Refund Policy</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="copyright">
-            © 2026 Comfy Clouds | Made in Egypt 🇪🇬
+            <div class="copyright">© 2026 Comfy Clouds. All rights reserved.</div>
         </div>
     </footer>
 
