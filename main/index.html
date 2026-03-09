@@ -66,17 +66,26 @@
 
         .brand-link { text-decoration: none; display: inline-block; }
 
-        header h1 { 
+         header h1 { 
             font-family: 'Montserrat', sans-serif;
             font-size: 2.5rem; font-weight: 900;
             text-transform: uppercase;
             margin: 0 0 20px; letter-spacing: 1px;
-            background: linear-gradient(to right, #e8aeff 0%, #ffbcfc 25%, #cff1ff 50%, #ffffff 75%, #87CEEB 100%);
+            background: linear-gradient(
+                to right,                 
+                #77cbec 0%,
+                #51b9e2 10%,
+                #ffb7ce 25%, 
+                #f8769f 40%, 
+                #f06292 65%,
+                #6fcef3 80%, 
+                #77cbec 100%
+                );
             background-size: 200% auto;
             animation: cloudMove 8s linear infinite;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            -webkit-text-stroke: 0.5px rgba(135, 206, 235, 0.3);
+            -webkit-text-stroke: 0.5px rgba(135, 207, 235, 0);
         }
 
         @keyframes cloudMove {
@@ -778,4 +787,5 @@
     </script>
 </body>
 </html>
+
 
