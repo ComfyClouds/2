@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comfy Clouds</title>
+    <link rel="icon" type="image/png" href="https://toppng.com/uploads/preview/cloud-logo-11551052586sww2wdgfof.png">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -468,23 +469,32 @@
             <input type="text" id="shopSearch" placeholder="Search for soft things..." onkeyup="runSearch()">
         </div>
         <div class="filter-nav">
-            <button class="filter-tab active" onclick="setFilter('ALL', 'ALL', this)">Couples</button>
+            <button class="filter-tab active" onclick="setFilter('ALL', 'ALL', this)">all</button>
+            <div class="dropdown">
+                <button class="dropbtn" onclick="toggleDropdown(this)">Couples ▽</button>
+                <div class="dropdown-content">
+                    <a href="javascript:void(0)" onclick="setFilter('COUPLES', 'T-SHIRT', this)">T-Shirts</a>
+                    <a href="javascript:void(0)" onclick="setFilter('COUPLES', 'PANTS', this)">Pants</a>
+                    <a href="javascript:void(0)" onclick="setFilter('COUPLES', 'PJS', this)">PJS</a>
+                    <a href="javascript:void(0)" onclick="setFilter('COUPLES', 'ALL', this)">All Couples</a>
+                </div>
+            </div>
             <div class="dropdown">
                 <button class="dropbtn" onclick="toggleDropdown(this)">Man ▽</button>
                 <div class="dropdown-content">
-                    <a href="javascript:void(0)" onclick="setFilter('MALE', 'T-SHIRT', this)">T-Shirts</a>
-                    <a href="javascript:void(0)" onclick="setFilter('MALE', 'PANTS', this)">Pants</a>
-                    <a href="javascript:void(0)" onclick="setFilter('MALE', 'PJS', this)">PJS</a>
-                    <a href="javascript:void(0)" onclick="setFilter('MALE', 'ALL', this)">All Man</a>
+                    <a href="javascript:void(0)" onclick="setFilter(['MALE', 'COUPLES'], 'T-SHIRT', this)">T-Shirts</a>
+                    <a href="javascript:void(0)" onclick="setFilter(['MALE', 'COUPLES'], 'PANTS', this)">Pants</a>
+                    <a href="javascript:void(0)" onclick="setFilter(['MALE', 'COUPLES'], 'PJS', this)">PJS</a>
+                    <a href="javascript:void(0)" onclick="setFilter(['MALE', 'COUPLES'], 'ALL', this)">All Man</a>
                 </div>
             </div>
             <div class="dropdown">
                 <button class="dropbtn" onclick="toggleDropdown(this)">Women ▽</button>
                 <div class="dropdown-content">
-                    <a href="javascript:void(0)" onclick="setFilter('FEMALE', 'T-SHIRT', this)">Tops</a>
-                    <a href="javascript:void(0)" onclick="setFilter('FEMALE', 'PANTS', this)">Pants</a>
-                    <a href="javascript:void(0)" onclick="setFilter('FEMALE', 'PJS', this)">PJS</a>
-                    <a href="javascript:void(0)" onclick="setFilter('FEMALE', 'ALL', this)">All Women</a>
+                    <a href="javascript:void(0)" onclick="setFilter(['FEMALE', 'COUPLES'], 'T-SHIRT', this)">Tops</a>
+                    <a href="javascript:void(0)" onclick="setFilter(['FEMALE', 'COUPLES'], 'PANTS', this)">Pants</a>
+                    <a href="javascript:void(0)" onclick="setFilter(['FEMALE', 'COUPLES'], 'PJS', this)">PJS</a>
+                    <a href="javascript:void(0)" onclick="setFilter(['FEMALE', 'COUPLES'], 'ALL', this)">All Woman</a>
                 </div>
             </div>
         </div>
@@ -549,19 +559,26 @@
             </div>
 
             <div class="footer-links">
-                <h4>Shop Men</h4>
-                <a onclick="setFilter('MALE', 'T-SHIRT')">T-Shirts</a>
-                <a onclick="setFilter('MALE', 'PANTS')">Pants</a>
-                <a onclick="setFilter('MALE', 'PJS')">PJS</a>
-                <a onclick="setFilter('MALE', 'ALL')">View All</a>
+                <h4>Shop Couples</h4>
+                <a href="javascript:void(0)" onclick="setFilter('COUPLES', 'T-SHIRT', this)">Shirts</a>
+                <a href="javascript:void(0)" onclick="setFilter('COUPLES', 'PANTS', this)">Pants</a>
+                <a href="javascript:void(0)" onclick="setFilter('COUPLES', 'PJS', this)">PJS</a>
+                <a href="javascript:void(0)" onclick="setFilter('COUPLES', 'ALL', this)">All Couples</a>
             </div>
-
+            <div class="footer-links">
+                <h4>Shop Men</h4>
+                <a href="javascript:void(0)" onclick="setFilter(['MALE', 'COUPLES'], 'T-SHIRT', this)">T-Shirts</a>
+                <a href="javascript:void(0)" onclick="setFilter(['MALE', 'COUPLES'], 'PANTS', this)">Pants</a>
+                <a href="javascript:void(0)" onclick="setFilter(['MALE', 'COUPLES'], 'PJS', this)">PJS</a>
+                <a href="javascript:void(0)" onclick="setFilter(['MALE', 'COUPLES'], 'ALL', this)">All Man</a>
+            </div>
+            
             <div class="footer-links">
                 <h4>Shop Women</h4>
-                <a onclick="setFilter('FEMALE', 'T-SHIRT')">Tops</a>
-                <a onclick="setFilter('FEMALE', 'PANTS')">Pants</a>
-                <a onclick="setFilter('FEMALE', 'PJS')">PJS</a>
-                <a onclick="setFilter('FEMALE', 'ALL')">View All</a>
+                <a href="javascript:void(0)" onclick="setFilter(['FEMALE', 'COUPLES'], 'T-SHIRT', this)">Tops</a>
+                <a href="javascript:void(0)" onclick="setFilter(['FEMALE', 'COUPLES'], 'PANTS', this)">Pants</a>
+                <a href="javascript:void(0)" onclick="setFilter(['FEMALE', 'COUPLES'], 'PJS', this)">PJS</a>
+                <a href="javascript:void(0)" onclick="setFilter(['FEMALE', 'COUPLES'], 'ALL', this)">All Woman</a>
             </div>
 
             <div class="footer-links">
@@ -706,35 +723,42 @@
             render(results);
         }
 
-        function setFilter(gender, category, btn) {
-            document.getElementById('shopSearch').value = "";
+        function setFilter(allowedGenders, category, element) {
             document.querySelectorAll('.filter-tab, .dropbtn').forEach(t => t.classList.remove('active'));
-            
-            if (btn) {
-                if (btn.classList.contains('dropbtn')) {
-                    btn.classList.add('active');
-                } else if (btn.tagName === 'A') {
-                    const drop = btn.closest('.dropdown');
-                    if (drop) drop.querySelector('.dropbtn').classList.add('active');
+            if (element) {
+                if (element.classList.contains('filter-tab')) {
+                    element.classList.add('active');
                 } else {
-                    btn.classList.add('active');
+                    const dropdown = element.closest('.dropdown');
+                    if (dropdown) {
+                        const dropbtn = dropdown.querySelector('.dropbtn');
+                        if (dropbtn) dropbtn.classList.add('active');
+                    }
                 }
             }
-            
+
             const scrollerSection = document.getElementById('new-arrivals-section');
             const videoBanner = document.querySelector('.video-banner-container');
 
-            if (gender === 'ALL') {
+            if (allowedGenders === 'ALL') {
                 render(productsDatabase);
                 scrollerSection.style.display = 'block';
                 if(videoBanner) videoBanner.style.display = 'block';
             } else {
                 scrollerSection.style.display = 'none'; 
                 if(videoBanner) videoBanner.style.display = 'none';
+
                 const filtered = productsDatabase.filter(p => {
-                    const gMatch = String(p.Gender).toUpperCase() === gender.toUpperCase();
-                    const cMatch = (category === 'ALL') || String(p.Category).toUpperCase().includes(category.toUpperCase());
-                    return gMatch && cMatch;
+                    const itemGender = String(p.Gender).toUpperCase();
+                    const itemCategory = String(p.Category).toUpperCase();
+
+                    const genderMatch = Array.isArray(allowedGenders) 
+                        ? allowedGenders.some(g => g.toUpperCase() === itemGender)
+                        : allowedGenders.toUpperCase() === itemGender;
+
+                    const categoryMatch = (category === 'ALL') || itemCategory.includes(category.toUpperCase());
+                    
+                    return genderMatch && categoryMatch;
                 });
                 render(filtered);
             }
@@ -754,4 +778,3 @@
     </script>
 </body>
 </html>
-
