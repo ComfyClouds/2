@@ -51,6 +51,10 @@
         .size-grid { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
         .size-btn { border: 1px solid rgba(100, 181, 246, 0.2); background: white; padding: 14px 22px; border-radius: 18px; cursor: pointer; font-weight: 600; transition: 0.3s; }
         .size-btn.active { background: var(--sky-blue); color: white; border-color: var(--sky-blue); }
+
+        /* New Couples Layout Styles */
+        .size-group-label { font-size: 0.85rem; font-weight: 700; color: var(--soft-pink); margin: 15px 0 8px 0; display: block; text-transform: uppercase; }
+        .size-grid.couples-grid { margin-bottom: 10px; padding: 10px; background: rgba(255,255,255,0.3); border-radius: 20px; }
         
         #stock-warn { color: var(--soft-pink); font-size: 0.85rem; font-weight: 700; margin-bottom: 20px; height: 1.2rem; }
 
@@ -149,8 +153,10 @@
             <span id="p-material" class="mat-label"></span>
             <p id="p-desc" style="font-size: 0.95rem; line-height: 1.6; color: #666; margin-bottom: 25px;"></p>
 
-            <p id="size-label" style="font-weight: 700; margin-bottom: 10px;">Select Size:</p>
-            <div id="size-options" class="size-grid"></div>
+            <div id="size-selection-area">
+                <p id="size-label" style="font-weight: 700; margin-bottom: 10px;">Select Size:</p>
+                <div id="size-options" class="size-grid"></div>
+            </div>
             
             <div id="stock-warn"></div>
             
@@ -239,8 +245,9 @@
         const productID = urlParams.get('id');
         
         let currentProduct = null;
-        let selectedSize = null; // Standard size or first size for couples
-        let secondSelectedSize = null; // Used only for couples
+        let selectedSize = null; 
+        let selectedSizeHim = null; // New
+        let selectedSizeHer = null; // New
         let currentQty = 1;
         let availableStock = 0;
         let isCouplesProduct = false;
@@ -279,88 +286,75 @@
                 const container = document.getElementById('size-options');
                 const cat = String(currentProduct.Category).toUpperCase();
                 const gen = String(currentProduct.Gender).toUpperCase();
-                
                 isCouplesProduct = gen.includes("COUPLES");
-                
-                if (isCouplesProduct) {
-                    document.getElementById('size-label').innerText = "Select 2 Sizes (for him & her):";
-                }
 
                 let sizes = (cat.includes("SHOE")) 
                     ? (gen === "MALE" ? ["39", "40", "41", "42", "43", "44", "45"] : ["36", "37", "38", "39", "40", "41"])
                     : ["S", "M", "L", "XL", "XXL"];
 
-                sizes.forEach(sz => {
-                    const stockValue = parseInt(currentProduct[sz]) || 0;
-                    const btn = document.createElement('button');
-                    btn.className = 'size-btn';
-                    btn.innerText = sz;
-                    
-                    if (stockValue <= 0) {
-                        btn.disabled = true;
-                    } else {
-                        btn.onclick = () => {
-                            if (isCouplesProduct) {
-                                handleCouplesSelection(btn, sz, stockValue);
-                            } else {
-                                handleStandardSelection(btn, sz, stockValue);
-                            }
-                        };
-                    }
-                    container.appendChild(btn);
-                });
+                if (isCouplesProduct) {
+                    document.getElementById('size-label').innerText = "Pick your set sizes:";
+                    createSizeGrid("Him", "him-grid", sizes, container);
+                    createSizeGrid("Her", "her-grid", sizes, container);
+                } else {
+                    createSizeGrid(null, "std-grid", sizes, container);
+                }
 
                 loadRelated(data, currentProduct.Category);
             } catch (e) { console.log(e); }
         }
 
-        function handleStandardSelection(btn, sz, stock) {
-            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            selectedSize = sz;
-            availableStock = stock;
-            updateStockWarning(stock);
-            resetQty();
+        function createSizeGrid(label, gridId, sizes, parent) {
+            if (label) {
+                const labelEl = document.createElement('span');
+                labelEl.className = 'size-group-label';
+                labelEl.innerText = `For ${label}:`;
+                parent.appendChild(labelEl);
+            }
+
+            const grid = document.createElement('div');
+            grid.className = label ? 'size-grid couples-grid' : 'size-grid';
+            grid.id = gridId;
+
+            sizes.forEach(sz => {
+                const stockValue = parseInt(currentProduct[sz]) || 0;
+                const btn = document.createElement('button');
+                btn.className = 'size-btn';
+                btn.innerText = sz;
+                
+                if (stockValue <= 0) {
+                    btn.disabled = true;
+                } else {
+                    btn.onclick = () => {
+                        grid.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        
+                        if (gridId === "him-grid") selectedSizeHim = sz;
+                        else if (gridId === "her-grid") selectedSizeHer = sz;
+                        else selectedSize = sz;
+
+                        updateStockCalculation();
+                        resetQty();
+                    };
+                }
+                grid.appendChild(btn);
+            });
+            parent.appendChild(grid);
         }
 
-        function handleCouplesSelection(btn, sz, stock) {
-            // Logic: Toggle selection. If selecting a 3rd, clear oldest.
-            if (btn.classList.contains('active')) {
-                btn.classList.remove('active');
-                if (selectedSize === sz) selectedSize = secondSelectedSize, secondSelectedSize = null;
-                else secondSelectedSize = null;
-            } else {
-                if (!selectedSize) {
-                    selectedSize = sz;
-                    btn.classList.add('active');
-                } else if (!secondSelectedSize) {
-                    secondSelectedSize = sz;
-                    btn.classList.add('active');
-                } else {
-                    // Already have two? Reset and pick this one as first
-                    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-                    selectedSize = sz;
-                    secondSelectedSize = null;
-                    btn.classList.add('active');
+        function updateStockCalculation() {
+            let stock = 0;
+            if (isCouplesProduct) {
+                if (selectedSizeHim && selectedSizeHer) {
+                    stock = Math.min(parseInt(currentProduct[selectedSizeHim]), parseInt(currentProduct[selectedSizeHer]));
                 }
+            } else if (selectedSize) {
+                stock = parseInt(currentProduct[selectedSize]);
             }
             
-            // For couples, we check the minimum available stock between the two sizes
-            if (selectedSize && secondSelectedSize) {
-                const s1 = parseInt(currentProduct[selectedSize]);
-                const s2 = parseInt(currentProduct[secondSelectedSize]);
-                availableStock = Math.min(s1, s2);
-                updateStockWarning(availableStock);
-            } else {
-                availableStock = 0;
-                document.getElementById('stock-warn').innerText = "";
-            }
-            resetQty();
-        }
-
-        function updateStockWarning(stock) {
+            availableStock = stock;
             const warn = document.getElementById('stock-warn');
-            warn.innerText = stock < 5 ? `🔥 Only ${stock} left in this combination!` : "";
+            warn.innerText = (stock > 0 && stock < 5) ? `🔥 Only ${stock} left in this combination!` : "";
         }
 
         function resetQty() {
@@ -369,8 +363,8 @@
         }
 
         function handleAddToCart() {
-            if (isCouplesProduct && (!selectedSize || !secondSelectedSize)) {
-                return showToast("Please select two sizes for the couple!");
+            if (isCouplesProduct && (!selectedSizeHim || !selectedSizeHer)) {
+                return showToast("Please select sizes for both Him and Her!");
             }
             if (!isCouplesProduct && !selectedSize) {
                 return showToast("Please select a size first!");
@@ -384,7 +378,7 @@
 
         function addToCartLogic() {
             let cart = JSON.parse(localStorage.getItem('comfy_cart')) || [];
-            const displaySize = isCouplesProduct ? `${selectedSize} + ${secondSelectedSize}` : selectedSize;
+            const displaySize = isCouplesProduct ? `Him: ${selectedSizeHim} | Her: ${selectedSizeHer}` : selectedSize;
             
             const existingItem = cart.find(item => 
                 item.Name === currentProduct.Name && item.Size === displaySize
@@ -392,12 +386,7 @@
 
             if (existingItem) {
                 let newQty = existingItem.Qty + currentQty;
-                if (newQty <= availableStock) {
-                    existingItem.Qty = newQty;
-                } else {
-                    existingItem.Qty = availableStock;
-                    showToast("Maximum stock reached!");
-                }
+                existingItem.Qty = Math.min(newQty, availableStock);
             } else {
                 cart.push({
                     cartId: Date.now(),
@@ -428,7 +417,7 @@
         }
 
         function updateQty(n) {
-            if (isCouplesProduct && (!selectedSize || !secondSelectedSize)) return;
+            if (isCouplesProduct && (!selectedSizeHim || !selectedSizeHer)) return;
             if (!isCouplesProduct && !selectedSize) return;
 
             let next = currentQty + n;
@@ -439,7 +428,7 @@
         }
 
         function buyNow() {
-            if (isCouplesProduct && (!selectedSize || !secondSelectedSize)) return showToast("Select two sizes first!");
+            if (isCouplesProduct && (!selectedSizeHim || !selectedSizeHer)) return showToast("Select both sizes first!");
             if (!isCouplesProduct && !selectedSize) return showToast("Select a size first!");
             handleAddToCart();
             window.location.href = "../checkout/";
