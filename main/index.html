@@ -429,6 +429,76 @@
             grid-column: 1 / -1;
             margin-top: 20px;
         }
+        .newsletter-box {
+    text-align: center;
+    padding-bottom: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+.newsletter-box h3 {
+    color: var(--sky-blue);
+    margin-bottom: 5px;
+}
+.newsletter-box p {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 20px;
+}
+.newsletter-form {
+    display: flex;
+    gap: 10px;
+    background: white;
+    padding: 8px;
+    border-radius: 50px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+.newsletter-form input {
+    flex: 1;
+    border: none;
+    padding: 0 20px;
+    border-radius: 50px;
+    outline: none;
+    font-family: inherit;
+}
+.newsletter-form button {
+    background: var(--sky-blue);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.newsletter-form button:hover {
+    background: var(--soft-pink);
+}
+@media (max-width: 480px) {
+    .newsletter-form { flex-direction: column; background: transparent; box-shadow: none; }
+    .newsletter-form input { padding: 15px; background: white; margin-bottom: 10px; }
+}
+#toast-container {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+}
+.toast {
+    background: white;
+    color: var(--sky-blue);
+    border: 2px solid var(--soft-pink);
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-weight: bold;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    margin-bottom: 10px;
+    animation: slideUp 0.4s ease-out;
+}
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
         .footer-copyright { text-align: center; margin-top: 40px; font-size: 0.75rem; opacity: 0.5; }
 
@@ -478,6 +548,7 @@
             ✨ Free Shipping on orders over 2000 EGP | Use code <b>COMFY20</b> for 20% off! | Soft as a Cloud, Made in Egypt🇪🇬 | New Arrivals are here! ✨
         </div>
     </div>
+    <div id="toast-container"></div>
 
     <header>
         <a href="../" class="brand-link"><h1>Comfy Clouds</h1></a>
@@ -610,6 +681,15 @@
                 <a href="../contact-us/">Contact Us</a>
             </div>
         </div>
+        <div class="newsletter-box">
+            <h3>Join the Cloud Club ☁️</h3>
+            <p>Subscribe for cozy updates and exclusive offers!</p>
+            <div class="newsletter-form">
+                <input type="email" id="newsletter-email" placeholder="Enter your email...">
+                <button onclick="subscribeNewsletter()">Join</button>
+            </div>
+        </div>
+        <hr style="border: 0; border-top: 1px solid rgba(100, 181, 246, 0.2); margin: 30px auto; max-width: 1000px;">
 
         <div class="footer-copyright">
             <p>© 2026 Comfy Clouds | Made in Egypt 🇪🇬</p>
@@ -626,8 +706,10 @@
 
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsc-LQJwIFX_LVhHd2olYG9RJ-1Ln3RSxWXnAntQFBDkgWzApnuoT68uPFE9cK8pc2OQ/exec";
+        const NEWSLETTER_URL = "https://script.google.com/macros/s/AKfycbxbwp3TJxmLqxHcwbXQfp1o6ok7_M9y6zAr8wyrV63EQ5mEDq1Mj3J7YzNvlf5ay3iXow/exec"; 
         let productsDatabase = [];
-
+    
+        // 1. Initialize Shop
         async function initShop() {
             try {
                 const response = await fetch(SCRIPT_URL);
@@ -635,10 +717,58 @@
                 render(productsDatabase);
                 updateBagUI();
             } catch (err) {
-                document.getElementById('loading').innerText = "Refresh to clear the fog. 🌧️";
+                const loadingEl = document.getElementById('loading');
+                if (loadingEl) loadingEl.innerText = "Refresh to clear the fog. 🌧️";
             }
         }
+    
+        // 2. Newsletter Subscription (Now accessible to the button)
+        function subscribeNewsletter() {
+    const emailField = document.getElementById('newsletter-email');
+    const email = emailField.value.trim();
+    
+    if (!email || !email.includes('@')) {
+        return showToast("Please enter a valid email! ☁️");
+    }
 
+    const btn = document.querySelector('.newsletter-form button');
+    btn.innerText = "Joining...";
+    btn.disabled = true;
+
+    // Create a temporary script to handle the response
+    const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+    window[callbackName] = function(data) {
+        delete window[callbackName];
+        document.body.removeChild(script);
+        
+        btn.innerText = "Join";
+        btn.disabled = false;
+
+        if (data.status === "exists") {
+            showToast("You're already in the club! ☁️");
+        } else {
+            showToast("Welcome to the Cloud Club! ✨");
+            emailField.value = "";
+        }
+    };
+
+    const script = document.createElement('script');
+    script.src = `${NEWSLETTER_URL}?email=${encodeURIComponent(email)}&callback=${callbackName}`;
+    document.body.appendChild(script);
+}
+function showToast(message) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerText = message;
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 500);
+    }, 3000);
+}
+    
+        // 3. UI Helpers
         window.onscroll = function() {
             const btn = document.getElementById('backToTop');
             if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
@@ -647,20 +777,20 @@
                 btn.classList.remove('visible');
             }
         };
-
+    
         function toggleDropdown(btn) {
             const parent = btn.parentElement;
             const wasOpen = parent.classList.contains('show');
             document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
             if (!wasOpen) parent.classList.add('show');
         }
-
+    
         window.onclick = function(event) {
             if (!event.target.matches('.dropbtn')) {
                 document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
             }
         }
-
+    
         function createProductCard(p, isScroller = false) {
             const imgs = p.Img.split(',');
             const sale = p["Sale Price"];
@@ -688,7 +818,7 @@
             `;
             return card;
         }
-
+    
         function scrollArr(amount) {
             const scroller = document.getElementById('new-scroller');
             const maxScrollLeft = scroller.scrollWidth - scroller.clientWidth;
@@ -701,7 +831,7 @@
                 scroller.scrollBy({ left: amount, behavior: 'smooth' });
             }
         }
-
+    
         function render(items) {
             const grid = document.getElementById('main-grid');
             const newScroller = document.getElementById('new-scroller');
@@ -710,12 +840,12 @@
             if (loading) loading.style.display = 'none';
             grid.innerHTML = '';
             newScroller.innerHTML = '';
-
+    
             if (items.length === 0) {
                 grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 50px;"><h3>No clouds found here...</h3></div>`;
                 return;
             }
-
+    
             let hasNewItems = false;
             items.forEach(p => {
                 if (String(p.Visible).toUpperCase() !== "TRUE") return;
@@ -727,7 +857,7 @@
             });
             document.getElementById('new-arrivals-section').style.display = hasNewItems ? 'block' : 'none';
         }
-
+    
         function runSearch() {
             const query = document.getElementById('shopSearch').value.toLowerCase();
             document.querySelectorAll('.filter-tab, .dropbtn').forEach(t => t.classList.remove('active'));
@@ -743,7 +873,7 @@
             });
             render(results);
         }
-
+    
         function setFilter(allowedGenders, category, element) {
             document.querySelectorAll('.filter-tab, .dropbtn').forEach(t => t.classList.remove('active'));
             if (element) {
@@ -757,10 +887,10 @@
                     }
                 }
             }
-
+    
             const scrollerSection = document.getElementById('new-arrivals-section');
             const videoBanner = document.querySelector('.video-banner-container');
-
+    
             if (allowedGenders === 'ALL') {
                 render(productsDatabase);
                 scrollerSection.style.display = 'block';
@@ -768,15 +898,15 @@
             } else {
                 scrollerSection.style.display = 'none'; 
                 if(videoBanner) videoBanner.style.display = 'none';
-
+    
                 const filtered = productsDatabase.filter(p => {
                     const itemGender = String(p.Gender).toUpperCase();
                     const itemCategory = String(p.Category).toUpperCase();
-
+    
                     const genderMatch = Array.isArray(allowedGenders) 
                         ? allowedGenders.some(g => g.toUpperCase() === itemGender)
                         : allowedGenders.toUpperCase() === itemGender;
-
+    
                     const categoryMatch = (category === 'ALL') || itemCategory.includes(category.toUpperCase());
                     
                     return genderMatch && categoryMatch;
@@ -788,13 +918,14 @@
             const grid = document.getElementById('main-grid');
             window.scrollTo({ top: grid.offsetTop - 150, behavior: 'smooth' });
         }
-
+    
         function updateBagUI() {
             const cart = JSON.parse(localStorage.getItem('comfy_cart')) || [];
             const bagEl = document.getElementById('bag-total');
             if (bagEl) bagEl.innerText = cart.length;
         }
-
+    
+        // Start
         initShop();
     </script>
 </body>
