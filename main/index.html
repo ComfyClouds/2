@@ -72,7 +72,7 @@
             text-transform: uppercase;
             margin: 0 0 20px; letter-spacing: 1px;
             background: linear-gradient(
-                to right,                 
+                to right,                  
                 #77cbec 0%,
                 #51b9e2 10%,
                 #ffb7ce 25%, 
@@ -423,6 +423,13 @@
             transition: 0.3s; border: none; cursor: pointer;
         }
         .pill:hover { transform: translateY(-5px); background: var(--sky-blue); color: white; }
+        
+        /* Centered Contact Us Section */
+        .footer-contact-centered {
+            grid-column: 1 / -1;
+            margin-top: 20px;
+        }
+
         .footer-copyright { text-align: center; margin-top: 40px; font-size: 0.75rem; opacity: 0.5; }
 
         .bag-float {
@@ -597,8 +604,8 @@
                 <a href="../terms/">Terms of Service</a>
                 <a href="../privacy/">Privacy Policy</a>
             </div>
-        </div>
-        <div class="footer-links">
+
+            <div class="footer-links footer-contact-centered">
                 <h4>Got Questions?</h4>
                 <a href="../contact-us/">Contact Us</a>
             </div>
@@ -792,8 +799,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
