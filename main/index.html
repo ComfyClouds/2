@@ -351,6 +351,59 @@
             margin: 20px auto;
             padding: 0 15px;
         }
+        .coming-soon-style {
+    width: 100%;
+    height: 400px;
+    /* Soft brand gradient */
+    background: linear-gradient(135deg, #e3f2fd 0%, #fce4ec 100%);
+    border-radius: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 2px solid #ffffff;
+    box-shadow: 0 20px 40px rgba(100, 181, 246, 0.1);
+}
+
+.brand-badge {
+    font-size: 0.8rem;
+    letter-spacing: 4px;
+    color: #64b5f6;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.banner-text h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 4rem; /* Big and bold */
+    color: #ffffff;
+    margin: 0;
+    text-shadow: 4px 4px 0px rgba(100, 181, 246, 0.2);
+    letter-spacing: -2px;
+}
+
+.banner-text p {
+    color: #6d6d6d;
+    font-weight: 500;
+    font-size: 1.2rem;
+    margin-top: 5px;
+}
+
+.launch-tag {
+    margin-top: 30px;
+    background: #ffffff;
+    color: #f06292;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: inline-block;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+}
 
         .main-banner {
             width: 100%;
@@ -588,14 +641,15 @@
     </header>
 
     <div class="banner-container">
-        <div class="main-banner">
-            <div class="banner-text">
-                <h2>The Ramadan Collection 🌙</h2>
-                <p>Stay cozy during late night suhoor.</p>
-                <button class="pill" onclick="document.getElementById('main-grid').scrollIntoView({behavior: 'smooth'})">Shop Now</button>
-            </div>
+    <div class="main-banner coming-soon-style">
+        <div class="banner-text">
+            <span class="brand-badge">Comfy Clouds</span>
+            <h1>COMING SOON</h1>
+            <p>The softest Egyptian cotton experience is on its way.</p>
+            <div class="launch-tag">STAY TUNED • MARCH 2026</div>
         </div>
     </div>
+</div>
 
     <div id="new-arrivals-section" class="scroller-container">
         <h2 class="scroller-header">New Arrivals ✨</h2>
@@ -930,6 +984,7 @@ function showToast(message) {
     </script>
 </body>
 </html>
+
 
 
 
