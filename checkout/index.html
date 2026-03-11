@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-5RVTQ5P6Y7"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5RVTQ5P6Y7"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -200,10 +199,51 @@
         <input type="text" id="c-name" placeholder="Full Name">
         <input type="tel" id="c-phone" placeholder="Phone (01xxxxxxxxx)">
         
-        <select id="c-city" onchange="updateTotal()">
+        <select id="c-city" onchange="toggleMetroOptions(); updateTotal()">
+            <option value="" disabled selected>Select Delivery Location</option>
             <option value="Cairo">Cairo</option>
             <option value="Giza">Giza</option>
             <option value="Alexandria">Alexandria</option>
+            <option value="Metro">Metro (Line 1 Station)</option>
+        </select>
+
+        <select id="metro-stations" style="display: none;" onchange="updateTotal()">
+            <option value="" disabled selected>Select Line 1 Station</option>
+            <option value="Helwan">Helwan</option>
+            <option value="Ain Helwan">Ain Helwan</option>
+            <option value="Helwan University">Helwan University</option>
+            <option value="Wadi Hof">Wadi Hof</option>
+            <option value="Hadayek Helwan">Hadayek Helwan</option>
+            <option value="El-Maasara">El-Maasara</option>
+            <option value="Tora El-Asmant">Tora El-Asmant</option>
+            <option value="Kozzika">Kozzika</option>
+            <option value="Tora El-Balad">Tora El-Balad</option>
+            <option value="Sakanat El-Maadi">Sakanat El-Maadi</option>
+            <option value="Maadi">Maadi</option>
+            <option value="Hadayek El-Maadi">Hadayek El-Maadi</option>
+            <option value="Dar El-Salam">Dar El-Salam</option>
+            <option value="El-Zahraa">El-Zahraa</option>
+            <option value="Mar Girgis">Mar Girgis</option>
+            <option value="El-Malek El-Saleh">El-Malek El-Saleh</option>
+            <option value="Al-Sayeda Zeinab">Al-Sayeda Zeinab</option>
+            <option value="Saad Zaghloul">Saad Zaghloul</option>
+            <option value="Sadat">Sadat</option>
+            <option value="Nasser">Nasser</option>
+            <option value="Orabi">Orabi</option>
+            <option value="Al-Shohadaa">Al-Shohadaa (Ramses)</option>
+            <option value="Ghamra">Ghamra</option>
+            <option value="El-Demerdash">El-Demerdash</option>
+            <option value="Manshiet El-Sadr">Manshiet El-Sadr</option>
+            <option value="Kobri El-Qobba">Kobri El-Qobba</option>
+            <option value="Hammamat El-Qobba">Hammamat El-Qobba</option>
+            <option value="Saray El-Qobba">Saray El-Qobba</option>
+            <option value="Hadayek El-Zaitoun">Hadayek El-Zaitoun</option>
+            <option value="Helmet El-Zaitoun">Helmet El-Zaitoun</option>
+            <option value="El-Matareya">El-Matareya</option>
+            <option value="Ain Shams">Ain Shams</option>
+            <option value="Ezbet El-Nakhl">Ezbet El-Nakhl</option>
+            <option value="El-Marg">El-Marg</option>
+            <option value="New El-Marg">New El-Marg</option>
         </select>
 
         <input type="text" id="c-addr" placeholder="Detailed Address">
@@ -376,18 +416,35 @@
         updateTotal();
     }
 
+    function toggleMetroOptions() {
+        const city = document.getElementById('c-city').value;
+        const metroSelect = document.getElementById('metro-stations');
+        const addrInput = document.getElementById('c-addr');
+        
+        if (city === "Metro") {
+            metroSelect.style.display = "block";
+            addrInput.placeholder = "Additional details (Optional)";
+        } else {
+            metroSelect.style.display = "none";
+            addrInput.placeholder = "Detailed Address";
+        }
+    }
+
     function updateTotal() {
         let base = cart.reduce((sum, i) => sum + (i.Price * i.Qty), 0);
         let discountedSubtotal = base - (base * discountRate);
 
         const city = document.getElementById('c-city').value;
-        let deliveryFee = (city === "Cairo") ? 35 : 60;
+        let deliveryFee = (city === "Cairo") ? 60 : 80;
+        
+        if (city === "Metro") deliveryFee = 35;
 
         if (discountedSubtotal >= 2000) {
             deliveryFee = 0;
             document.getElementById('delivery-info').innerText = "Free Delivery applied! ☁️✨";
         } else {
-            document.getElementById('delivery-info').innerText = `Delivery to ${city}: ${deliveryFee} EGP`;
+            let locText = city === "Metro" ? (document.getElementById('metro-stations').value || "Metro Station") : city;
+            document.getElementById('delivery-info').innerText = `Delivery to ${locText}: ${deliveryFee} EGP`;
         }
 
         document.getElementById('final-total').innerText = Math.round(discountedSubtotal + deliveryFee);
@@ -402,6 +459,7 @@
         const name = document.getElementById('c-name').value.trim();
         const phone = document.getElementById('c-phone').value.trim();
         const city = document.getElementById('c-city').value;
+        const metroStation = document.getElementById('metro-stations').value;
         const addr = document.getElementById('c-addr').value.trim();
         const promo = document.getElementById('c-promo').value.trim().toUpperCase() || "None";
         const total = document.getElementById('final-total').innerText;
@@ -412,13 +470,14 @@
 
         if (!nameRegex.test(name)) { showToast("Please enter a valid name"); return; }
         if (!phoneRegex.test(phone)) { showToast("Check Phone number"); return; }
-        if (!city || addr.length < 5) { showToast("Please check address"); return; }
+        if (city === "Metro" && !metroStation) { showToast("Select a Metro station"); return; }
+        if (city !== "Metro" && (!city || addr.length < 5)) { showToast("Please check address"); return; }
 
         btn.disabled = true;
         btn.innerText = "SENDING ORDER...";
 
         const orderId = "CC-" + Math.random().toString(36).substr(2, 5).toUpperCase();
-        const fullAddr = `${city}, ${addr}`;
+        const fullAddr = (city === "Metro") ? `METRO: ${metroStation} Station, ${addr}` : `${city}, ${addr}`;
         const itemsList = cart.map(i => `- ${i.Qty}x ${i.Name} (${i.Size})`).join('\n');
 
         try {
@@ -446,14 +505,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
