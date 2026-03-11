@@ -1,0 +1,16 @@
+# Robots.txt for Comfy Clouds - https://comfycloudseg.store/
+
+User-agent: *
+Allow: /
+Allow: /shop
+Allow: /products
+
+# Prevent Google from showing checkout or private script pages
+Disallow: /checkout/
+Disallow: /cart/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /scripts/
+
+# The exact location of your sitemap
+Sitemap: https://comfycloudseg.store/sitemap.xml
