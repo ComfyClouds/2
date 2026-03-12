@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-5RVTQ5P6Y7"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-5RVTQ5P6Y7');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5RVTQ5P6Y7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-5RVTQ5P6Y7');
+    </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comfy Clouds | Ultra-Soft Apparel Made in Egypt</title>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Comfy Clouds",
+      "url": "https://comfycloudseg.store/"
+    }
+    </script>
     
     <meta name="title" content="Comfy Clouds | Ultra-Soft Apparel Made in Egypt">
     <meta name="description" content="Discover the softest loungewear designed for ultimate comfort. Explore our Comfy Clouds collection, made with premium Egyptian materials.">
@@ -44,7 +52,6 @@
             scroll-behavior: smooth;
         }
 
-        /* Moving Sky Background */
         body {
             background: linear-gradient(-45deg, #e3f2fd, #ffcfdf, #ffffff, #bbdefb);
             background-size: 400% 400%;
@@ -59,7 +66,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* --- REALISTIC PUFFY CLOUD LOGO --- */
         .logo-cloud-wrapper {
             position: fixed;
             top: 25px;
@@ -98,15 +104,12 @@
             border-radius: 50%;
         }
 
-        /* --- THE STENCIL TEXT (Animated Sky Inside) --- */
         .logo-text {
             font-family: 'Montserrat', sans-serif;
             font-size: 1.8rem;
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 1px;
-            
-            /* Pure CSS Cloud Animation */
             background: linear-gradient(
                 to right, 
                 #77cbec 0%,
@@ -119,11 +122,8 @@
             );
             background-size: 200% auto;
             animation: cloudMove 8s linear infinite;
-            
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            
-            /* Outline to keep it sharp */
             -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.178);
         }
 
@@ -132,7 +132,6 @@
             100% { background-position: 200% center; }
         }
 
-        /* --- SECTIONS --- */
         section {
             min-height: 100vh;
             display: flex;
@@ -195,6 +194,26 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-15px); }
         }
+
+        /* Mobile Fixes */
+        @media (max-width: 768px) {
+            .logo-cloud-wrapper {
+                position: absolute;
+                left: 50%;
+                top: 15px;
+                transform: translateX(-50%);
+            }
+            .cloud-shape {
+                width: 240px;
+                height: 75px;
+            }
+            .cloud-shape::before { width: 80px; height: 80px; top: -35px; left: 40px; }
+            .cloud-shape::after { width: 100px; height: 100px; top: -50px; right: 40px; }
+            .logo-text { font-size: 1.4rem; }
+            .hero h2 { font-size: 2.8rem; margin-top: 60px; }
+            .hero p { font-size: 1.1rem; }
+            .btn-primary { padding: 18px 45px; font-size: 1rem; }
+        }
     </style>
 </head>
 <body>
@@ -248,4 +267,3 @@
 
 </body>
 </html>
-
