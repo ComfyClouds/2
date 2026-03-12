@@ -1,16 +1,19 @@
 # Robots.txt for Comfy Clouds - https://comfycloudseg.store/
 
 User-agent: *
-Allow: /
-Allow: /shop
-Allow: /products
 
-# Prevent Google from showing checkout or private script pages
+# Allow crawling of the main site and the shop folder
+Allow: /
+Allow: /main/
+
+# Prevent Google from indexing empty carts or the checkout process
+# This keeps your search results clean
 Disallow: /checkout/
 Disallow: /cart/
 Disallow: /admin/
 Disallow: /api/
 Disallow: /scripts/
+Disallow: /*?* # Prevents indexing of messy filter URLs (like ?gender=MALE)
 
-# The exact location of your sitemap
+# Point Google directly to your sitemap
 Sitemap: https://comfycloudseg.store/sitemap.xml
