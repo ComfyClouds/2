@@ -391,7 +391,8 @@
     }
 
     function applyPromo() {
-        const inputCode = document.getElementById('c-promo').value.trim();
+        // Lowercase for Case-Insensitivity
+        const inputCode = document.getElementById('c-promo').value.trim().toLowerCase();
         if (!inputCode) {
             activePromoCode = "";
             isFreeShippingCode = false;
@@ -404,17 +405,24 @@
 
         cart.forEach(item => {
             if (item.Promo) {
-                if (item.Promo.includes(':')) {
-                    const [code, value] = item.Promo.split(':');
-                    if (code === inputCode) {
-                        foundMatch = true;
-                        if (value === 'FREE') isFreeShippingCode = true;
+                // Split by comma to support multiple codes in one cell
+                const promoOptions = item.Promo.split(',').map(p => p.trim().toLowerCase());
+                
+                promoOptions.forEach(option => {
+                    // Percentage/Free Shipping (:)
+                    if (option.includes(':')) {
+                        const [code, value] = option.split(':');
+                        if (code === inputCode) {
+                            foundMatch = true;
+                            if (value === 'free') isFreeShippingCode = true;
+                        }
                     }
-                }
-                if (item.Promo.includes('-')) {
-                    const [code] = item.Promo.split('-');
-                    if (code === inputCode) foundMatch = true;
-                }
+                    // Fixed Amount (-)
+                    if (option.includes('-')) {
+                        const [code] = option.split('-');
+                        if (code === inputCode) foundMatch = true;
+                    }
+                });
             }
         });
 
@@ -446,24 +454,31 @@
         let subtotal = 0;
         let totalDiscount = 0;
 
+        // Use lowercase version for consistent comparison
+        const currentCode = activePromoCode.toLowerCase();
+
         cart.forEach(item => {
             let itemPrice = parseFloat(item.Price) || 0;
             let itemTotal = itemPrice * item.Qty;
             subtotal += itemTotal;
 
-            if (activePromoCode && item.Promo) {
-                if (item.Promo.includes(':')) {
-                    const [code, val] = item.Promo.split(':');
-                    if (code === activePromoCode && val !== 'FREE') {
-                        totalDiscount += (itemTotal * parseFloat(val));
+            if (currentCode && item.Promo) {
+                const promoOptions = item.Promo.split(',').map(p => p.trim().toLowerCase());
+                
+                promoOptions.forEach(option => {
+                    if (option.includes(':')) {
+                        const [code, val] = option.split(':');
+                        if (code === currentCode && val !== 'free') {
+                            totalDiscount += (itemTotal * parseFloat(val));
+                        }
                     }
-                }
-                if (item.Promo.includes('-')) {
-                    const [code, val] = item.Promo.split('-');
-                    if (code === activePromoCode) {
-                        totalDiscount += (parseFloat(val) * item.Qty);
+                    if (option.includes('-')) {
+                        const [code, val] = option.split('-');
+                        if (code === currentCode) {
+                            totalDiscount += (parseFloat(val) * item.Qty);
+                        }
                     }
-                }
+                });
             }
         });
 
@@ -475,6 +490,7 @@
 
         const currentDiscountedSubtotal = subtotal - totalDiscount;
 
+        // Free shipping on 2000+ or via special code
         if (currentDiscountedSubtotal >= 2000 || isFreeShippingCode) {
             deliveryFee = 0;
             document.getElementById('delivery-info').innerText = "Free Delivery applied! ☁️✨";
@@ -519,7 +535,15 @@
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify({ orderId, name, phone, address: fullAddr, items: itemsList, promo: activePromoCode || "None", total })
+                body: JSON.stringify({ 
+                    orderId, 
+                    name, 
+                    phone, 
+                    address: fullAddr, 
+                    items: itemsList, 
+                    promo: activePromoCode.toUpperCase() || "None", 
+                    total 
+                })
             });
 
             setTimeout(() => {
