@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5RVTQ5P6Y7"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-5RVTQ5P6Y7');
-</script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-5RVTQ5P6Y7');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout | Comfy Clouds</title>
@@ -151,13 +150,13 @@
             transition: 0.3s; border: none; cursor: pointer;
         }
         .footer-contact-centered {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    margin-top: 20px;
-}
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-top: 20px;
+        }
         .pill:hover { transform: translateY(-5px); background: var(--sky-blue); color: white; }
         .footer-copyright { text-align: center; margin-top: 40px; font-size: 0.75rem; opacity: 0.5; }
 
@@ -278,27 +277,27 @@
             </div>
 
             <div class="footer-links">
-    <h4>Shop Couples</h4>
-    <a href="../main/?gender=COUPLES&cat=T-SHIRT">Shirts</a>
-    <a href="../main/?gender=COUPLES&cat=PANTS">Pants</a>
-    <a href="../main/?gender=COUPLES&cat=PJS">PJS</a>
-    <a href="../main/?gender=COUPLES&cat=ALL">View All</a>
-</div>
-<div class="footer-links">
-    <h4>Shop Men</h4>
-    <a href="../main/?gender=MALE,UNISEX&cat=T-SHIRT">T-Shirts</a>
-    <a href="../main/?gender=MALE,UNISEX&cat=PANTS">Pants</a>
-    <a href="../main/?gender=MALE,UNISEX&cat=PJS">PJS</a>
-    <a href="../main/?gender=MALE,UNISEX&cat=ALL">View All</a>
-</div>
+                <h4>Shop Couples</h4>
+                <a href="../main/?gender=COUPLES&cat=T-SHIRT">Shirts</a>
+                <a href="../main/?gender=COUPLES&cat=PANTS">Pants</a>
+                <a href="../main/?gender=COUPLES&cat=PJS">PJS</a>
+                <a href="../main/?gender=COUPLES&cat=ALL">View All</a>
+            </div>
+            <div class="footer-links">
+                <h4>Shop Men</h4>
+                <a href="../main/?gender=MALE,UNISEX&cat=T-SHIRT">T-Shirts</a>
+                <a href="../main/?gender=MALE,UNISEX&cat=PANTS">Pants</a>
+                <a href="../main/?gender=MALE,UNISEX&cat=PJS">PJS</a>
+                <a href="../main/?gender=MALE,UNISEX&cat=ALL">View All</a>
+            </div>
 
-<div class="footer-links">
-    <h4>Shop Women</h4>
-    <a href="../main/?gender=FEMALE,UNISEX&cat=T-SHIRT">Tops</a>
-    <a href="../main/?gender=FEMALE,UNISEX&cat=PANTS">Pants</a>
-    <a href="../main/?gender=FEMALE,UNISEX&cat=PJS">PJS</a>
-    <a href="../main/?gender=FEMALE,UNISEX&cat=ALL">View All</a>
-</div>
+            <div class="footer-links">
+                <h4>Shop Women</h4>
+                <a href="../main/?gender=FEMALE,UNISEX&cat=T-SHIRT">Tops</a>
+                <a href="../main/?gender=FEMALE,UNISEX&cat=PANTS">Pants</a>
+                <a href="../main/?gender=FEMALE,UNISEX&cat=PJS">PJS</a>
+                <a href="../main/?gender=FEMALE,UNISEX&cat=ALL">View All</a>
+            </div>
 
             <div class="footer-links">
                 <h4>Support</h4>
@@ -311,7 +310,6 @@
         <div class="footer-links footer-contact-centered">
                 <h4>Got Questions?</h4>
                 <a href="../contact-us/">Contact Us</a>
-            </div>
         </div>
 
         <div class="footer-copyright">
@@ -327,8 +325,8 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxOZKl6cH1Fh3L_wJ9qX5SbD5Y5cSzpMmt3qRWiR_MJL-gQRNjWSxRDet0Nh4Eok4SXdA/exec";
     
     let cart = JSON.parse(localStorage.getItem('comfy_cart')) || [];
-    let discountRate = 0;
-    let LIVE_PROMOS = {};
+    let activePromoCode = ""; 
+    let isFreeShippingCode = false;
 
     window.onscroll = function() {
         const btn = document.getElementById('backToTop');
@@ -348,13 +346,6 @@
         setTimeout(() => toast.remove(), 3000);
     }
 
-    async function fetchPromos() {
-        try {
-            const res = await fetch(SCRIPT_URL);
-            LIVE_PROMOS = await res.json();
-        } catch (e) { console.error("Promo fetch failed", e); }
-    }
-
     function loadCart() {
         const list = document.getElementById('cart-items');
         list.innerHTML = cart.length === 0 ? "<p style='text-align:center;'>Bag is empty</p>" : "";
@@ -362,16 +353,13 @@
         
         cart.forEach((item, index) => {
             const isLimitReached = item.MaxStock && item.Qty >= item.MaxStock;
-
             list.innerHTML += `<div class="cart-row">
                 <img src="${item.Img}" class="cart-img">
                 <div class="cart-details"><b>${item.Name}</b><br><small>${item.Size}</small></div>
                 <div class="qty-controls">
                     <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
                     <span>${item.Qty}</span>
-                    <button class="qty-btn" 
-                            onclick="changeQty(${index}, 1)" 
-                            style="${isLimitReached ? 'opacity:0.3; cursor:not-allowed;' : ''}">+</button>
+                    <button class="qty-btn" onclick="changeQty(${index}, 1)" style="${isLimitReached ? 'opacity:0.3; cursor:not-allowed;' : ''}">+</button>
                 </div>
                 <button class="remove-btn" onclick="removeItem(${index})">×</button>
             </div>`;
@@ -382,12 +370,10 @@
     function changeQty(index, n) {
         const item = cart[index];
         const newQty = item.Qty + n;
-
         if (n === 1 && item.MaxStock && item.Qty >= item.MaxStock) {
             showToast(`Only ${item.MaxStock} available in stock! ☁️`);
             return;
         }
-
         if (newQty > 0) {
             item.Qty = newQty;
             saveAndReload();
@@ -405,12 +391,39 @@
     }
 
     function applyPromo() {
-        const inputCode = document.getElementById('c-promo').value.trim().toUpperCase();
-        if (LIVE_PROMOS[inputCode]) {
-            discountRate = LIVE_PROMOS[inputCode];
-            showToast(`Success! ${discountRate * 100}% discount applied. ✨`);
+        const inputCode = document.getElementById('c-promo').value.trim();
+        if (!inputCode) {
+            activePromoCode = "";
+            isFreeShippingCode = false;
+            updateTotal();
+            return;
+        }
+
+        let foundMatch = false;
+        isFreeShippingCode = false;
+
+        cart.forEach(item => {
+            if (item.Promo) {
+                if (item.Promo.includes(':')) {
+                    const [code, value] = item.Promo.split(':');
+                    if (code === inputCode) {
+                        foundMatch = true;
+                        if (value === 'FREE') isFreeShippingCode = true;
+                    }
+                }
+                if (item.Promo.includes('-')) {
+                    const [code] = item.Promo.split('-');
+                    if (code === inputCode) foundMatch = true;
+                }
+            }
+        });
+
+        if (foundMatch) {
+            activePromoCode = inputCode;
+            showToast("Promo Applied! ✨");
         } else {
-            discountRate = 0;
+            activePromoCode = "";
+            isFreeShippingCode = false;
             showToast("Invalid Code ⛈️");
         }
         updateTotal();
@@ -420,7 +433,6 @@
         const city = document.getElementById('c-city').value;
         const metroSelect = document.getElementById('metro-stations');
         const addrInput = document.getElementById('c-addr');
-        
         if (city === "Metro") {
             metroSelect.style.display = "block";
             addrInput.placeholder = "Additional details (Optional)";
@@ -431,37 +443,59 @@
     }
 
     function updateTotal() {
-        let base = cart.reduce((sum, i) => sum + (i.Price * i.Qty), 0);
-        let discountedSubtotal = base - (base * discountRate);
+        let subtotal = 0;
+        let totalDiscount = 0;
+
+        cart.forEach(item => {
+            let itemPrice = parseFloat(item.Price) || 0;
+            let itemTotal = itemPrice * item.Qty;
+            subtotal += itemTotal;
+
+            if (activePromoCode && item.Promo) {
+                if (item.Promo.includes(':')) {
+                    const [code, val] = item.Promo.split(':');
+                    if (code === activePromoCode && val !== 'FREE') {
+                        totalDiscount += (itemTotal * parseFloat(val));
+                    }
+                }
+                if (item.Promo.includes('-')) {
+                    const [code, val] = item.Promo.split('-');
+                    if (code === activePromoCode) {
+                        totalDiscount += (parseFloat(val) * item.Qty);
+                    }
+                }
+            }
+        });
 
         const city = document.getElementById('c-city').value;
-        let deliveryFee = (city === "Cairo") ? 60 : 80;
-        
-        if (city === "Metro") deliveryFee = 35;
+        let deliveryFee = 0;
+        if (city === "Cairo" || city === "Giza") deliveryFee = 60;
+        else if (city === "Alexandria") deliveryFee = 80;
+        else if (city === "Metro") deliveryFee = 35;
 
-        if (discountedSubtotal >= 2000) {
+        const currentDiscountedSubtotal = subtotal - totalDiscount;
+
+        if (currentDiscountedSubtotal >= 2000 || isFreeShippingCode) {
             deliveryFee = 0;
             document.getElementById('delivery-info').innerText = "Free Delivery applied! ☁️✨";
-        } else {
+        } else if (city) {
             let locText = city === "Metro" ? (document.getElementById('metro-stations').value || "Metro Station") : city;
             document.getElementById('delivery-info').innerText = `Delivery to ${locText}: ${deliveryFee} EGP`;
+        } else {
+            document.getElementById('delivery-info').innerText = "Select a city for delivery price";
         }
 
-        document.getElementById('final-total').innerText = Math.round(discountedSubtotal + deliveryFee);
+        const finalVal = Math.max(0, currentDiscountedSubtotal + deliveryFee);
+        document.getElementById('final-total').innerText = Math.round(finalVal);
     }
 
     async function placeOrder() {
-        if (cart.length === 0) {
-            showToast("Bag is empty ☁️");
-            return;
-        }
-
+        if (cart.length === 0) { showToast("Bag is empty ☁️"); return; }
         const name = document.getElementById('c-name').value.trim();
         const phone = document.getElementById('c-phone').value.trim();
         const city = document.getElementById('c-city').value;
         const metroStation = document.getElementById('metro-stations').value;
         const addr = document.getElementById('c-addr').value.trim();
-        const promo = document.getElementById('c-promo').value.trim().toUpperCase() || "None";
         const total = document.getElementById('final-total').innerText;
         const btn = document.getElementById('submit-order-btn');
 
@@ -485,14 +519,13 @@
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify({ orderId, name, phone, address: fullAddr, items: itemsList, promo, total })
+                body: JSON.stringify({ orderId, name, phone, address: fullAddr, items: itemsList, promo: activePromoCode || "None", total })
             });
 
             setTimeout(() => {
                 localStorage.removeItem('comfy_cart');
                 window.location.href = "../thank-you/";
             }, 1000);
-
         } catch (e) {
             showToast("Error sending order. Try again.");
             btn.disabled = false;
@@ -500,7 +533,6 @@
         }
     }
 
-    fetchPromos();
     loadCart();
     </script>
 </body>
