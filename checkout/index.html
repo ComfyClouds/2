@@ -330,9 +330,9 @@
 
     window.onscroll = function() {
         const btn = document.getElementById('backToTop');
-        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        if (btn && (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300)) {
             btn.classList.add('visible');
-        } else {
+        } else if (btn) {
             btn.classList.remove('visible');
         }
     };
@@ -391,7 +391,6 @@
     }
 
     function applyPromo() {
-        // Lowercase for Case-Insensitivity
         const inputCode = document.getElementById('c-promo').value.trim().toLowerCase();
         if (!inputCode) {
             activePromoCode = "";
@@ -405,21 +404,21 @@
 
         cart.forEach(item => {
             if (item.Promo) {
-                // Split by comma to support multiple codes in one cell
                 const promoOptions = item.Promo.split(',').map(p => p.trim().toLowerCase());
                 
                 promoOptions.forEach(option => {
-                    // Percentage/Free Shipping (:)
                     if (option.includes(':')) {
-                        const [code, value] = option.split(':');
+                        const parts = option.split(':');
+                        const code = parts[0].trim();
+                        const val = parts[1].trim();
                         if (code === inputCode) {
                             foundMatch = true;
-                            if (value === 'free') isFreeShippingCode = true;
+                            if (val === 'free') isFreeShippingCode = true;
                         }
                     }
-                    // Fixed Amount (-)
-                    if (option.includes('-')) {
-                        const [code] = option.split('-');
+                    else if (option.includes('-')) {
+                        const parts = option.split('-');
+                        const code = parts[0].trim();
                         if (code === inputCode) foundMatch = true;
                     }
                 });
@@ -453,8 +452,6 @@
     function updateTotal() {
         let subtotal = 0;
         let totalDiscount = 0;
-
-        // Use lowercase version for consistent comparison
         const currentCode = activePromoCode.toLowerCase();
 
         cart.forEach(item => {
@@ -467,13 +464,20 @@
                 
                 promoOptions.forEach(option => {
                     if (option.includes(':')) {
-                        const [code, val] = option.split(':');
+                        const parts = option.split(':');
+                        const code = parts[0].trim();
+                        const val = parts[1].trim();
                         if (code === currentCode && val !== 'free') {
-                            totalDiscount += (itemTotal * parseFloat(val));
+                            let discVal = parseFloat(val);
+                            // Auto-correct: if they put '10', treat as 0.1
+                            if (discVal >= 1) discVal = discVal / 100;
+                            totalDiscount += (itemTotal * discVal);
                         }
                     }
-                    if (option.includes('-')) {
-                        const [code, val] = option.split('-');
+                    else if (option.includes('-')) {
+                        const parts = option.split('-');
+                        const code = parts[0].trim();
+                        const val = parts[1].trim();
                         if (code === currentCode) {
                             totalDiscount += (parseFloat(val) * item.Qty);
                         }
@@ -490,7 +494,6 @@
 
         const currentDiscountedSubtotal = subtotal - totalDiscount;
 
-        // Free shipping on 2000+ or via special code
         if (currentDiscountedSubtotal >= 2000 || isFreeShippingCode) {
             deliveryFee = 0;
             document.getElementById('delivery-info').innerText = "Free Delivery applied! ☁️✨";
