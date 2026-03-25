@@ -383,7 +383,6 @@
                     MaxStock: availableStock,
                     Price: parseFloat(currentProduct["Sale Price"] || currentProduct.Price),
                     Img: document.getElementById('p-img').src,
-                    // UPDATED LINE: Captures promo data from the sheet row
                     Promo: currentProduct.Promo || ""
                 });
             }
@@ -392,9 +391,17 @@
 
         function loadRelated(all, cat) {
             const grid = document.getElementById('related-grid');
-            let sameCat = all.filter(p => p.Category === cat && String(p.ID) !== productID);
+            
+            // Updated filter to check for the "Visible" column value
+            let sameCat = all.filter(p => 
+                p.Category === cat && 
+                String(p.ID) !== productID && 
+                String(p.Visible).toUpperCase() === "TRUE"
+            );
+
             let finalSelection = sameCat.sort(() => 0.5 - Math.random()).slice(0, 4);
 
+            grid.innerHTML = ''; 
             finalSelection.forEach(p => {
                 grid.innerHTML += `
                     <a href="../product/?id=${p.ID}" class="related-card">
