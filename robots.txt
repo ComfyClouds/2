@@ -1,19 +1,33 @@
 # Robots.txt for Comfy Clouds - https://comfycloudseg.store/
+# Updated: 2026-03-26
 
 User-agent: *
+# Performance: Prevent bots from hitting the server too hard
+Crawl-delay: 1
 
-# Allow crawling of the main site and the shop folder
+# Allow crawling of the main site and shop
 Allow: /
 Allow: /main/
 
-# Prevent Google from indexing empty carts or the checkout process
-# This keeps your search results clean
+# Prevent indexing of private or functional pages
 Disallow: /checkout/
 Disallow: /cart/
 Disallow: /admin/
 Disallow: /api/
 Disallow: /scripts/
-Disallow: /*?* # Prevents indexing of messy filter URLs (like ?gender=MALE)
+Disallow: /my-account/
 
-# Point Google directly to your sitemap
+# Clean SEO: Prevent indexing of search results and messy filter URLs
+Disallow: /*?s=
+Disallow: /*?search=
+Disallow: /*?filter_
+Disallow: /*?*
+
+# Block aggressive scrapers that don't help SEO
+User-agent: CCBot
+Disallow: /
+User-agent: GPTBot
+Disallow: /
+
+# Sitemap
 Sitemap: https://comfycloudseg.store/sitemap.xml
