@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5RVTQ5P6Y7"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-5RVTQ5P6Y7');
-</script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-5RVTQ5P6Y7');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shipping & Delivery | Comfy Clouds</title>
@@ -28,7 +27,7 @@
         .policy-container {
             background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(15px);
-            max-width: 600px;
+            max-width: 650px;
             width: 100%;
             padding: 40px;
             border-radius: 35px;
@@ -42,26 +41,37 @@
             color: #64b5f6;
             margin-bottom: 30px;
         }
+        .scroll-area {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+            margin-bottom: 20px;
+        }
+        .scroll-area::-webkit-scrollbar {
+            width: 6px;
+        }
+        .scroll-area::-webkit-scrollbar-thumb {
+            background-color: rgba(100, 181, 246, 0.3);
+            border-radius: 10px;
+        }
         .rate-card {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: rgba(255, 255, 255, 0.7);
-            padding: 20px 25px;
+            padding: 15px 20px;
             border-radius: 20px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             transition: 0.3s;
             border: 1px solid rgba(255, 255, 255, 0.5);
         }
-        .rate-card:hover { transform: scale(1.02); background: white; }
+        .rate-card:hover { transform: scale(1.01); background: white; }
         .city-info { text-align: left; display: flex; align-items: center; gap: 15px; }
         .city-text { display: flex; flex-direction: column; }
         .city-name { font-weight: 700; display: block; color: #4a4a4a; }
         .days { font-size: 0.8rem; color: #888; }
         .price { font-weight: 700; color: #f06292; font-size: 1.1rem; }
-        
         .metro-icon { color: #64b5f6; font-size: 1.2rem; }
-
         .contact-box { 
             margin-top: 40px; 
             padding-top: 20px; 
@@ -93,49 +103,170 @@
     <span style="font-size: 0.8rem; letter-spacing: 2px; color: #aaa; text-transform: uppercase;">Comfy Clouds</span>
     <h1>Delivery & Shipping</h1>
 
-    <div class="rate-card" style="border: 1px solid rgba(100, 181, 246, 0.3);">
-        <div class="city-info">
-            <i class="fas fa-subway metro-icon"></i>
-            <div class="city-text">
-                <span class="city-name">Metro (Line 1 Stations)</span>
-                <span class="days">2-3 Business Days</span>
+    <div class="scroll-area">
+        <div class="rate-card" style="border: 1px solid rgba(100, 181, 246, 0.3);">
+            <div class="city-info">
+                <i class="fas fa-subway metro-icon"></i>
+                <div class="city-text">
+                    <span class="city-name">Metro (Line 1 Stations)</span>
+                    <span class="days">1-3 Business Days</span>
+                </div>
             </div>
+            <span class="price">35 EGP</span>
         </div>
-        <span class="price">35 EGP</span>
+
+        <div class="rate-card">
+            <div class="city-info">
+                <div class="city-text">
+                    <span class="city-name">Cairo</span>
+                    <span class="days">1-3 Business Days</span>
+                </div>
+            </div>
+            <span class="price">60 EGP</span>
+        </div>
+
+        <div class="rate-card">
+            <div class="city-info">
+                <div class="city-text">
+                    <span class="city-name">Giza</span>
+                    <span class="days">1-3 Business Days</span>
+                </div>
+            </div>
+            <span class="price">60 EGP</span>
+        </div>
+
+        <div class="rate-card">
+            <div class="city-info">
+                <div class="city-text">
+                    <span class="city-name">Helwan</span>
+                    <span class="days">1-3 Business Days</span>
+                </div>
+            </div>
+            <span class="price">65 EGP</span>
+        </div>
+
+        <div class="rate-card">
+            <div class="city-info">
+                <div class="city-text">
+                    <span class="city-name">Kerdasa</span>
+                    <span class="days">1-3 Business Days</span>
+                </div>
+            </div>
+            <span class="price">65 EGP</span>
+        </div>
+
+        <div class="rate-card">
+            <div class="city-info">
+                <div class="city-text">
+                    <span class="city-name">Al Saf</span>
+                    <span class="days">1-3 Business Days</span>
+                </div>
+            </div>
+            <span class="price">65 EGP</span>
+        </div>
+
+        <div class="rate-card">
+            <div class="city-info">
+                <div class="city-text">
+                    <span class="city-name">Al Ayat</span>
+                    <span class="days">1-3 Business Days</span>
+                </div>
+            </div>
+            <span class="price">65 EGP</span>
+        </div>
+
+        <div class="rate-card">
+            <div class="city-info">
+                <div class="city-text">
+                    <span class="city-name">Alexandria</span>
+                    <span class="days">1-3 Business Days</span>
+                </div>
+            </div>
+            <span class="price">70 EGP</span>
+        </div>
+
+        <div class="rate-card">
+            <div class="city-info">
+                <div class="city-text">
+                    <span class="city-name">Damietta</span>
+                    <span class="days">1-3 Business Days</span>
+                </div>
+            </div>
+            <span class="price">70 EGP</span>
+        </div>
+
+        <div class="rate-card">
+            <div class="city-info">
+                <div class="city-text">
+                    <span class="city-name">Gharbia / Beheira / Dakahlia</span>
+                    <span class="days">2-4 Business Days</span>
+                </div>
+            </div>
+            <span class="price">70 EGP</span>
+        </div>
+
+        <div class="rate-card">
+            <div class="city-info">
+                <div class="city-text">
+                    <span class="city-name">Qalyubia / Sharqia</span>
+                    <span class="days">2-4 Business Days</span>
+                </div>
+            </div>
+            <span class="price">70 EGP</span>
+        </div>
+
+        <div class="rate-card">
+            <div class="city-info">
+                <div class="city-text">
+                    <span class="city-name">Kafr El Sheikh / Monufia</span>
+                    <span class="days">2-4 Business Days</span>
+                </div>
+            </div>
+            <span class="price">70 EGP</span>
+        </div>
+
+        <div class="rate-card">
+            <div class="city-info">
+                <div class="city-text">
+                    <span class="city-name">Fayum / Beni Suef / Minya</span>
+                    <span class="days">3-5 Business Days</span>
+                </div>
+            </div>
+            <span class="price">90 EGP</span>
+        </div>
+
+        <div class="rate-card">
+            <div class="city-info">
+                <div class="city-text">
+                    <span class="city-name">Assiut / Sohag / Qena / Luxor</span>
+                    <span class="days">3-5 Business Days</span>
+                </div>
+            </div>
+            <span class="price">90 EGP</span>
+        </div>
+
+        <div class="rate-card">
+            <div class="city-info">
+                <div class="city-text">
+                    <span class="city-name">Al Wadi Al Gadid</span>
+                    <span class="days">4-7 Business Days</span>
+                </div>
+            </div>
+            <span class="price">100 EGP</span>
+        </div>
+
+        <div class="rate-card">
+            <div class="city-info">
+                <div class="city-text">
+                    <span class="city-name">North & South Sinai</span>
+                    <span class="days">4-7 Business Days</span>
+                </div>
+            </div>
+            <span class="price">130 EGP</span>
+        </div>
     </div>
 
-    <div class="rate-card">
-        <div class="city-info">
-            <div class="city-text">
-                <span class="city-name">Cairo</span>
-                <span class="days">3-4 Business Days</span>
-            </div>
-        </div>
-        <span class="price">60 EGP</span>
-    </div>
-
-    <div class="rate-card">
-        <div class="city-info">
-            <div class="city-text">
-                <span class="city-name">Giza</span>
-                <span class="days">4-5 Business Days</span>
-            </div>
-        </div>
-        <span class="price">80 EGP</span>
-    </div>
-
-    <div class="rate-card">
-        <div class="city-info">
-            <div class="city-text">
-                <span class="city-name">Alexandria</span>
-                <span class="days">4-5 Business Days</span>
-            </div>
-        </div>
-        <span class="price">80 EGP</span>
-    </div>
-    <p style="color: #777; font-size: 0.9rem; margin: 30px 0;">We’re committed to getting your order to you as fast as possible.</p>
-
-    <p style="color: #777; font-size: 0.85rem; margin: 30px 0; line-height: 1.6;">
+    <p style="color: #777; font-size: 0.85rem; margin: 20px 0; line-height: 1.6;">
         <b>Note:</b> For Metro delivery, the courier will meet you at the requested station platform or ticket gate. ☁️
     </p>
 
@@ -150,5 +281,3 @@
 
 </body>
 </html>
-
-
