@@ -267,7 +267,11 @@
     </div>
 
     <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxOZKl6cH1Fh3L_wJ9qX5SbD5Y5cSzpMmt3qRWiR_MJL-gQRNjWSxRDet0Nh4Eok4SXdA/exec";
+    // URL for Order Submissions
+    const ORDER_URL = "https://script.google.com/macros/s/AKfycbxOZKl6cH1Fh3L_wJ9qX5SbD5Y5cSzpMmt3qRWiR_MJL-gQRNjWSxRDet0Nh4Eok4SXdA/exec";
+    
+    // Paste your Products Handler URL here (the one that returns the product list)
+    const PRODUCTS_URL = "https://script.google.com/macros/s/AKfycbzsc-LQJwIFX_LVhHd2olYG9RJ-1Ln3RSxWXnAntQFBDkgWzApnuoT68uPFE9cK8pc2OQ/exec"; 
     
     let cart = JSON.parse(localStorage.getItem('comfy_cart')) || [];
     let activePromoCode = ""; 
@@ -294,14 +298,15 @@
     async function validateCartStock() {
         if (cart.length === 0) return;
         try {
-            const response = await fetch(SCRIPT_URL + "?action=getProducts");
+            // Fetching from the Products Handler URL
+            const response = await fetch(PRODUCTS_URL + "?action=getProducts");
             const allProducts = await response.json();
             let itemRemoved = false;
             
             const validCart = cart.filter(cartItem => {
                 const liveProduct = allProducts.find(p => p.Name === cartItem.Name);
                 
-                // If product is missing, Status is Hidden/Inactive, OR Visible is False
+                // Logic to remove items if missing, Hidden/Inactive, or if Visible is False
                 const isHidden = !liveProduct || 
                                  liveProduct.Status === "Hidden" || 
                                  liveProduct.Status === "Inactive" || 
@@ -320,7 +325,7 @@
                 showToast("Some items are no longer available and were removed ⛈️");
                 loadCart();
             }
-        } catch (e) { console.log("Status check failed or skipped."); }
+        } catch (e) { console.log("Validation check failed. Check PRODUCTS_URL."); }
     }
 
     function loadCart() {
@@ -507,7 +512,7 @@
         const itemsList = cart.map(i => `- ${i.Qty}x ${i.Name} (${i.Size})`).join('\n');
 
         try {
-            await fetch(SCRIPT_URL, {
+            await fetch(ORDER_URL, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'text/plain' },
