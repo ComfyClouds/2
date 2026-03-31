@@ -87,10 +87,28 @@
             width: 100%; padding: 22px; border: none; border-radius: 50px; 
             background: var(--sky-blue); color: white; font-weight: 800; 
             font-size: 1.1rem; cursor: pointer; transition: 0.4s;
-            text-align: center; text-decoration: none; display: block;
         }
         .order-btn:hover { background: var(--soft-pink); transform: translateY(-3px); }
         .order-btn:disabled { background: #ccc !important; cursor: not-allowed; transform: none !important; }
+        
+        /* Comfy Clouds Empty State Styling */
+        .empty-bag-link {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            color: var(--sky-blue);
+            font-weight: 800;
+            font-size: 1.5rem;
+            padding: 40px 20px;
+            border: 2px dashed var(--sky-blue);
+            border-radius: 30px;
+            transition: 0.3s;
+        }
+        .empty-bag-link:hover {
+            background: #f0f9ff;
+            transform: scale(1.02);
+        }
+
         .footer-wave-container { line-height: 0; width: 100%; margin-top: 50px; }
         .cloud-wave-svg { position: relative; display: block; width: calc(100% + 1.3px); height: 70px; }
         .cloud-wave-svg .shape-fill { fill: rgba(255, 255, 255, 0.4); }
@@ -126,12 +144,7 @@
         
         <div id="cart-items"></div>
 
-        <div id="empty-state" style="display: none; text-align: center; padding: 20px 0;">
-            <p style="font-size: 1.1rem; color: #888; margin-bottom: 25px; font-weight: 600;">Your bag is light as a feather... too light! ☁️</p>
-            <a href="../main/" class="order-btn">DRIFT TO SHOPPING</a>
-        </div>
-
-        <div id="checkout-form-area">
+        <div id="checkout-form-wrapper">
             <div class="total-box">Total: <span id="final-total">0</span> EGP</div>
             <div class="delivery-note" id="delivery-info">Select a city for delivery price</div>
 
@@ -333,34 +346,34 @@
 
     function loadCart() {
         const list = document.getElementById('cart-items');
-        const formArea = document.getElementById('checkout-form-area');
-        const emptyState = document.getElementById('empty-state');
+        const formWrapper = document.getElementById('checkout-form-wrapper');
         
-        list.innerHTML = "";
-
         if (cart.length === 0) {
-            formArea.style.display = "none";
-            emptyState.style.display = "block";
-            list.innerHTML = "<p style='text-align:center; font-weight:bold; color:var(--sky-blue);'>Bag is empty</p>";
-        } else {
-            formArea.style.display = "block";
-            emptyState.style.display = "none";
-            
-            cart.forEach((item, index) => {
-                const isLimitReached = item.MaxStock && item.Qty >= item.MaxStock;
-                list.innerHTML += `<div class="cart-row">
-                    <img src="${item.Img}" class="cart-img">
-                    <div class="cart-details"><b>${item.Name}</b><br><small>${item.Size}</small></div>
-                    <div class="qty-controls">
-                        <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
-                        <span>${item.Qty}</span>
-                        <button class="qty-btn" onclick="changeQty(${index}, 1)" style="${isLimitReached ? 'opacity:0.3; cursor:not-allowed;' : ''}">+</button>
-                    </div>
-                    <button class="remove-btn" onclick="removeItem(${index})">×</button>
-                </div>`;
-            });
-            updateTotal();
+            // Hide all checkout boxes
+            formWrapper.style.display = "none";
+            // Show catchy link
+            list.innerHTML = `<a href="../main/" class="empty-bag-link">Your bag is floating away... <br> ✨ Start Shopping ✨</a>`;
+            return;
         }
+
+        // Show checkout boxes if bag is NOT empty
+        formWrapper.style.display = "block";
+        list.innerHTML = "";
+        
+        cart.forEach((item, index) => {
+            const isLimitReached = item.MaxStock && item.Qty >= item.MaxStock;
+            list.innerHTML += `<div class="cart-row">
+                <img src="${item.Img}" class="cart-img">
+                <div class="cart-details"><b>${item.Name}</b><br><small>${item.Size}</small></div>
+                <div class="qty-controls">
+                    <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
+                    <span>${item.Qty}</span>
+                    <button class="qty-btn" onclick="changeQty(${index}, 1)" style="${isLimitReached ? 'opacity:0.3; cursor:not-allowed;' : ''}">+</button>
+                </div>
+                <button class="remove-btn" onclick="removeItem(${index})">×</button>
+            </div>`;
+        });
+        updateTotal();
     }
 
     function changeQty(index, n) {
