@@ -134,7 +134,28 @@
             <option value="" disabled selected>Select Delivery Location</option>
             <option value="Cairo">Cairo</option>
             <option value="Giza">Giza</option>
+            <option value="Helwan">Helwan</option>
+            <option value="Kerdasa">Kerdasa</option>
+            <option value="Al Saf">Al Saf</option>
+            <option value="Al Ayat">Al Ayat</option>
+            <option value="Damietta">Damietta</option>
+            <option value="Gharbia">Gharbia</option>
+            <option value="Beheira">Beheira</option>
+            <option value="Dakahlia">Dakahlia</option>
+            <option value="Qalyubia">Qalyubia</option>
+            <option value="Sharqia">Sharqia</option>
             <option value="Alexandria">Alexandria</option>
+            <option value="Kafr El Sheikh">Kafr El Sheikh</option>
+            <option value="Monufia">Monufia</option>
+            <option value="Fayum">Fayum</option>
+            <option value="Beni Suef">Beni Suef</option>
+            <option value="Minya">Minya</option>
+            <option value="Assiut">Assiut</option>
+            <option value="Sohag">Sohag</option>
+            <option value="Qena">Qena</option>
+            <option value="Luxor">Luxor</option>
+            <option value="Al Wadi Al Gadid">Al Wadi Al Gadid</option>
+            <option value="North & South Sinai">North & South Sinai</option>
             <option value="Metro">Metro (Line 1 Station)</option>
         </select>
 
@@ -270,11 +291,33 @@
         setTimeout(() => toast.remove(), 3000);
     }
 
+    async function validateCartStock() {
+        if (cart.length === 0) return;
+        try {
+            const response = await fetch(SCRIPT_URL + "?action=getProducts");
+            const allProducts = await response.json();
+            let itemRemoved = false;
+            const validCart = cart.filter(cartItem => {
+                const liveProduct = allProducts.find(p => p.Name === cartItem.Name);
+                if (!liveProduct || liveProduct.Status === "Hidden" || liveProduct.Status === "Inactive") {
+                    itemRemoved = true;
+                    return false;
+                }
+                return true;
+            });
+            if (itemRemoved) {
+                cart = validCart;
+                localStorage.setItem('comfy_cart', JSON.stringify(cart));
+                showToast("Some items are no longer available and were removed ⛈️");
+                loadCart();
+            }
+        } catch (e) { console.log("Status check skipped."); }
+    }
+
     function loadCart() {
         const list = document.getElementById('cart-items');
         list.innerHTML = cart.length === 0 ? "<p style='text-align:center;'>Bag is empty</p>" : "";
         document.getElementById('submit-order-btn').disabled = (cart.length === 0);
-        
         cart.forEach((item, index) => {
             const isLimitReached = item.MaxStock && item.Qty >= item.MaxStock;
             list.innerHTML += `<div class="cart-row">
@@ -322,16 +365,12 @@
             updateTotal();
             return;
         }
-
         let foundMatch = false;
         let localFreeShipping = false;
-
         cart.forEach(item => {
             if (item.Promo) {
-                // Ensure item.Promo is treated as a string even if it comes as something else
                 const promoStr = String(item.Promo).toLowerCase();
                 const promoOptions = promoStr.split(',').map(p => p.trim());
-                
                 promoOptions.forEach(option => {
                     if (option.includes(':')) {
                         const parts = option.split(':');
@@ -346,7 +385,6 @@
                 });
             }
         });
-
         if (foundMatch) {
             activePromoCode = inputCode;
             isFreeShippingCode = localFreeShipping;
@@ -381,11 +419,9 @@
             let itemPrice = parseFloat(item.Price) || 0;
             let itemTotal = itemPrice * item.Qty;
             subtotal += itemTotal;
-
             if (currentCode && item.Promo) {
                 const promoStr = String(item.Promo).toLowerCase();
                 const promoOptions = promoStr.split(',').map(p => p.trim());
-                
                 promoOptions.forEach(option => {
                     if (option.includes(':')) {
                         const parts = option.split(':');
@@ -400,9 +436,7 @@
                         const parts = option.split('-');
                         const code = parts[0].trim();
                         const val = parts[1].trim();
-                        if (code === currentCode) {
-                            totalDiscount += (parseFloat(val) * item.Qty);
-                        }
+                        if (code === currentCode) totalDiscount += (parseFloat(val) * item.Qty);
                     }
                 });
             }
@@ -410,8 +444,14 @@
 
         const city = document.getElementById('c-city').value;
         let deliveryFee = 0;
+        
+        // Updated Delivery Logic
         if (city === "Cairo" || city === "Giza") deliveryFee = 60;
-        else if (city === "Alexandria") deliveryFee = 80;
+        else if (["Helwan", "Kerdasa", "Al Saf", "Al Ayat"].includes(city)) deliveryFee = 65;
+        else if (["Damietta", "Gharbia", "Beheira", "Dakahlia", "Qalyubia", "Sharqia", "Alexandria", "Kafr El Sheikh", "Monufia"].includes(city)) deliveryFee = 70;
+        else if (["Fayum", "Beni Suef", "Minya", "Assiut", "Sohag", "Qena", "Luxor"].includes(city)) deliveryFee = 90;
+        else if (city === "Al Wadi Al Gadid") deliveryFee = 100;
+        else if (city === "North & South Sinai") deliveryFee = 130;
         else if (city === "Metro") deliveryFee = 35;
 
         const currentDiscountedSubtotal = subtotal - totalDiscount;
@@ -432,6 +472,9 @@
 
     async function placeOrder() {
         if (cart.length === 0) { showToast("Bag is empty ☁️"); return; }
+        await validateCartStock();
+        if (cart.length === 0) return;
+
         const name = document.getElementById('c-name').value.trim();
         const phone = document.getElementById('c-phone').value.trim();
         const city = document.getElementById('c-city').value;
@@ -462,7 +505,6 @@
                 headers: { 'Content-Type': 'text/plain' },
                 body: JSON.stringify({ orderId, name, phone, address: fullAddr, items: itemsList, promo: activePromoCode.toUpperCase() || "None", total })
             });
-
             setTimeout(() => {
                 localStorage.removeItem('comfy_cart');
                 window.location.href = "../thank-you/";
@@ -475,6 +517,7 @@
     }
 
     loadCart();
+    validateCartStock();
     </script>
 </body>
 </html>
