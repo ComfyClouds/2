@@ -91,7 +91,6 @@
         .order-btn:hover { background: var(--soft-pink); transform: translateY(-3px); }
         .order-btn:disabled { background: #ccc !important; cursor: not-allowed; transform: none !important; }
         
-        /* Comfy Clouds Empty State Styling */
         .empty-bag-link {
             display: block;
             text-align: center;
@@ -315,7 +314,7 @@
     }
 
     async function validateCartStock() {
-        if (cart.length === 0) return;
+        if (cart.length === 0) return true;
         try {
             const response = await fetch(PRODUCTS_URL + "?action=getProducts");
             const allProducts = await response.json();
@@ -338,10 +337,15 @@
             if (itemRemoved) {
                 cart = validCart;
                 localStorage.setItem('comfy_cart', JSON.stringify(cart));
-                showToast("Some items are no longer available and were removed ⛈️");
+                showToast("Some items are no longer available ⛈️");
                 loadCart();
+                return false;
             }
-        } catch (e) { console.log("Validation check failed."); }
+            return true;
+        } catch (e) { 
+            console.log("Validation check failed."); 
+            return true; // Proceed if network fails to check stock
+        }
     }
 
     function loadCart() {
@@ -349,14 +353,11 @@
         const formWrapper = document.getElementById('checkout-form-wrapper');
         
         if (cart.length === 0) {
-            // Hide all checkout boxes
             formWrapper.style.display = "none";
-            // Show catchy link
             list.innerHTML = `<a href="../main/" class="empty-bag-link">Your bag is floating away... <br> ✨ Start Shopping ✨</a>`;
             return;
         }
 
-        // Show checkout boxes if bag is NOT empty
         formWrapper.style.display = "block";
         list.innerHTML = "";
         
@@ -378,11 +379,11 @@
 
     function changeQty(index, n) {
         const item = cart[index];
-        const newQty = item.Qty + n;
         if (n === 1 && item.MaxStock && item.Qty >= item.MaxStock) {
-            showToast(`Only ${item.MaxStock} available in stock! ☁️`);
+            showToast(`Only ${item.MaxStock} available! ☁️`);
             return;
         }
+        const newQty = item.Qty + n;
         if (newQty > 0) {
             item.Qty = newQty;
             saveAndReload();
@@ -468,18 +469,14 @@
                 promoOptions.forEach(option => {
                     if (option.includes(':')) {
                         const parts = option.split(':');
-                        const code = parts[0].trim();
-                        const val = parts[1].trim();
-                        if (code === currentCode && val !== 'free') {
-                            let discVal = parseFloat(val);
+                        if (parts[0].trim() === currentCode && parts[1].trim() !== 'free') {
+                            let discVal = parseFloat(parts[1].trim());
                             if (discVal >= 1) discVal = discVal / 100;
                             totalDiscount += (itemTotal * discVal);
                         }
                     } else if (option.includes('-')) {
                         const parts = option.split('-');
-                        const code = parts[0].trim();
-                        const val = parts[1].trim();
-                        if (code === currentCode) totalDiscount += (parseFloat(val) * item.Qty);
+                        if (parts[0].trim() === currentCode) totalDiscount += (parseFloat(parts[1].trim()) * item.Qty);
                     }
                 });
             }
@@ -487,7 +484,6 @@
 
         const city = document.getElementById('c-city').value;
         let deliveryFee = 0;
-        
         if (city === "Cairo" || city === "Giza") deliveryFee = 60;
         else if (["Helwan", "Kerdasa", "Al Saf", "Al Ayat"].includes(city)) deliveryFee = 65;
         else if (["Damietta", "Gharbia", "Beheira", "Dakahlia", "Qalyubia", "Sharqia", "Alexandria", "Kafr El Sheikh", "Monufia"].includes(city)) deliveryFee = 70;
@@ -497,7 +493,6 @@
         else if (city === "Metro") deliveryFee = 35;
 
         const currentDiscountedSubtotal = subtotal - totalDiscount;
-
         if (currentDiscountedSubtotal >= 2000 || isFreeShippingCode) {
             deliveryFee = 0;
             document.getElementById('delivery-info').innerText = "Free Delivery applied! ☁️✨";
@@ -513,10 +508,6 @@
     }
 
     async function placeOrder() {
-        if (cart.length === 0) { showToast("Bag is empty ☁️"); return; }
-        await validateCartStock();
-        if (cart.length === 0) return;
-
         const name = document.getElementById('c-name').value.trim();
         const phone = document.getElementById('c-phone').value.trim();
         const city = document.getElementById('c-city').value;
@@ -525,15 +516,21 @@
         const total = document.getElementById('final-total').innerText;
         const btn = document.getElementById('submit-order-btn');
 
-        const nameRegex = /^[a-zA-Z\s\u0600-\u06FF]{3,40}$/;
-        const phoneRegex = /^01[0-2,5]{1}[0-9]{8}$/;
-
-        if (!nameRegex.test(name)) { showToast("Please enter a valid name"); return; }
-        if (!phoneRegex.test(phone)) { showToast("Check Phone number"); return; }
+        if (!/^[a-zA-Z\s\u0600-\u06FF]{3,40}$/.test(name)) { showToast("Invalid Name"); return; }
+        if (!/^01[0-2,5]{1}[0-9]{8}$/.test(phone)) { showToast("Check Phone number"); return; }
         if (city === "Metro" && !metroStation) { showToast("Select a Metro station"); return; }
-        if (city !== "Metro" && (!city || addr.length < 5)) { showToast("Please check address"); return; }
+        if (city !== "Metro" && (!city || addr.length < 5)) { showToast("Check address"); return; }
 
         btn.disabled = true;
+        btn.innerText = "VERIFYING BAG...";
+
+        const isStockValid = await validateCartStock();
+        if (!isStockValid) {
+            btn.disabled = false;
+            btn.innerText = "COMPLETE ORDER";
+            return; 
+        }
+
         btn.innerText = "SENDING ORDER...";
 
         const orderId = "CC-" + Math.random().toString(36).substr(2, 5).toUpperCase();
@@ -547,19 +544,19 @@
                 headers: { 'Content-Type': 'text/plain' },
                 body: JSON.stringify({ orderId, name, phone, address: fullAddr, items: itemsList, promo: activePromoCode.toUpperCase() || "None", total })
             });
-            setTimeout(() => {
-                localStorage.removeItem('comfy_cart');
-                window.location.href = "../thank-you/";
-            }, 1000);
+            
+            localStorage.removeItem('comfy_cart');
+            window.location.href = "../thank-you/";
         } catch (e) {
-            showToast("Error sending order. Try again.");
+            showToast("Network error. Try again.");
             btn.disabled = false;
             btn.innerText = "COMPLETE ORDER";
         }
     }
 
     loadCart();
-    validateCartStock();
+    // Initial stock check removed here to prevent double-lag on page load; 
+    // it runs instantly upon "Complete Order" click.
     </script>
 </body>
 </html>
