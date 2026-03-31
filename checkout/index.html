@@ -297,21 +297,30 @@
             const response = await fetch(SCRIPT_URL + "?action=getProducts");
             const allProducts = await response.json();
             let itemRemoved = false;
+            
             const validCart = cart.filter(cartItem => {
                 const liveProduct = allProducts.find(p => p.Name === cartItem.Name);
-                if (!liveProduct || liveProduct.Status === "Hidden" || liveProduct.Status === "Inactive") {
+                
+                // If product is missing, Status is Hidden/Inactive, OR Visible is False
+                const isHidden = !liveProduct || 
+                                 liveProduct.Status === "Hidden" || 
+                                 liveProduct.Status === "Inactive" || 
+                                 String(liveProduct.Visible).toUpperCase() === "FALSE";
+
+                if (isHidden) {
                     itemRemoved = true;
                     return false;
                 }
                 return true;
             });
+
             if (itemRemoved) {
                 cart = validCart;
                 localStorage.setItem('comfy_cart', JSON.stringify(cart));
                 showToast("Some items are no longer available and were removed ⛈️");
                 loadCart();
             }
-        } catch (e) { console.log("Status check skipped."); }
+        } catch (e) { console.log("Status check failed or skipped."); }
     }
 
     function loadCart() {
@@ -445,7 +454,6 @@
         const city = document.getElementById('c-city').value;
         let deliveryFee = 0;
         
-        // Updated Delivery Logic
         if (city === "Cairo" || city === "Giza") deliveryFee = 60;
         else if (["Helwan", "Kerdasa", "Al Saf", "Al Ayat"].includes(city)) deliveryFee = 65;
         else if (["Damietta", "Gharbia", "Beheira", "Dakahlia", "Qalyubia", "Sharqia", "Alexandria", "Kafr El Sheikh", "Monufia"].includes(city)) deliveryFee = 70;
