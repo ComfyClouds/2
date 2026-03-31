@@ -87,6 +87,7 @@
             width: 100%; padding: 22px; border: none; border-radius: 50px; 
             background: var(--sky-blue); color: white; font-weight: 800; 
             font-size: 1.1rem; cursor: pointer; transition: 0.4s;
+            text-align: center; text-decoration: none; display: block;
         }
         .order-btn:hover { background: var(--soft-pink); transform: translateY(-3px); }
         .order-btn:disabled { background: #ccc !important; cursor: not-allowed; transform: none !important; }
@@ -122,90 +123,98 @@
     <div class="checkout-container">
         <a href="../main/" class="back-link">← Back to Products</a>
         <h2>Your Bag ⛈️</h2>
+        
         <div id="cart-items"></div>
-        
-        <div class="total-box">Total: <span id="final-total">0</span> EGP</div>
-        <div class="delivery-note" id="delivery-info">Select a city for delivery price</div>
 
-        <input type="text" id="c-name" placeholder="Full Name">
-        <input type="tel" id="c-phone" placeholder="Phone (01xxxxxxxxx)">
-        
-        <select id="c-city" onchange="toggleMetroOptions(); updateTotal()">
-            <option value="" disabled selected>Select Delivery Location</option>
-            <option value="Cairo">Cairo</option>
-            <option value="Giza">Giza</option>
-            <option value="Helwan">Helwan</option>
-            <option value="Kerdasa">Kerdasa</option>
-            <option value="Al Saf">Al Saf</option>
-            <option value="Al Ayat">Al Ayat</option>
-            <option value="Damietta">Damietta</option>
-            <option value="Gharbia">Gharbia</option>
-            <option value="Beheira">Beheira</option>
-            <option value="Dakahlia">Dakahlia</option>
-            <option value="Qalyubia">Qalyubia</option>
-            <option value="Sharqia">Sharqia</option>
-            <option value="Alexandria">Alexandria</option>
-            <option value="Kafr El Sheikh">Kafr El Sheikh</option>
-            <option value="Monufia">Monufia</option>
-            <option value="Fayum">Fayum</option>
-            <option value="Beni Suef">Beni Suef</option>
-            <option value="Minya">Minya</option>
-            <option value="Assiut">Assiut</option>
-            <option value="Sohag">Sohag</option>
-            <option value="Qena">Qena</option>
-            <option value="Luxor">Luxor</option>
-            <option value="Al Wadi Al Gadid">Al Wadi Al Gadid</option>
-            <option value="North & South Sinai">North & South Sinai</option>
-            <option value="Metro">Metro (Line 1 Station)</option>
-        </select>
-
-        <select id="metro-stations" style="display: none;" onchange="updateTotal()">
-            <option value="" disabled selected>Select Line 1 Station</option>
-            <option value="Helwan">Helwan</option>
-            <option value="Ain Helwan">Ain Helwan</option>
-            <option value="Helwan University">Helwan University</option>
-            <option value="Wadi Hof">Wadi Hof</option>
-            <option value="Hadayek Helwan">Hadayek Helwan</option>
-            <option value="El-Maasara">El-Maasara</option>
-            <option value="Tora El-Asmant">Tora El-Asmant</option>
-            <option value="Kozzika">Kozzika</option>
-            <option value="Tora El-Balad">Tora El-Balad</option>
-            <option value="Sakanat El-Maadi">Sakanat El-Maadi</option>
-            <option value="Maadi">Maadi</option>
-            <option value="Hadayek El-Maadi">Hadayek El-Maadi</option>
-            <option value="Dar El-Salam">Dar El-Salam</option>
-            <option value="El-Zahraa">El-Zahraa</option>
-            <option value="Mar Girgis">Mar Girgis</option>
-            <option value="El-Malek El-Saleh">El-Malek El-Saleh</option>
-            <option value="Al-Sayeda Zeinab">Al-Sayeda Zeinab</option>
-            <option value="Saad Zaghloul">Saad Zaghloul</option>
-            <option value="Sadat">Sadat</option>
-            <option value="Nasser">Nasser</option>
-            <option value="Orabi">Orabi</option>
-            <option value="Al-Shohadaa">Al-Shohadaa (Ramses)</option>
-            <option value="Ghamra">Ghamra</option>
-            <option value="El-Demerdash">El-Demerdash</option>
-            <option value="Manshiet El-Sadr">Manshiet El-Sadr</option>
-            <option value="Kobri El-Qobba">Kobri El-Qobba</option>
-            <option value="Hammamat El-Qobba">Hammamat El-Qobba</option>
-            <option value="Saray El-Qobba">Saray El-Qobba</option>
-            <option value="Hadayek El-Zaitoun">Hadayek El-Zaitoun</option>
-            <option value="Helmet El-Zaitoun">Helmet El-Zaitoun</option>
-            <option value="El-Matareya">El-Matareya</option>
-            <option value="Ain Shams">Ain Shams</option>
-            <option value="Ezbet El-Nakhl">Ezbet El-Nakhl</option>
-            <option value="El-Marg">El-Marg</option>
-            <option value="New El-Marg">New El-Marg</option>
-        </select>
-
-        <input type="text" id="c-addr" placeholder="Detailed Address">
-        
-        <div class="promo-wrap">
-            <input type="text" id="c-promo" placeholder="Promo Code">
-            <button class="apply-btn" onclick="applyPromo()">Apply</button>
+        <div id="empty-state" style="display: none; text-align: center; padding: 20px 0;">
+            <p style="font-size: 1.1rem; color: #888; margin-bottom: 25px; font-weight: 600;">Your bag is light as a feather... too light! ☁️</p>
+            <a href="../main/" class="order-btn">DRIFT TO SHOPPING</a>
         </div>
 
-        <button class="order-btn" id="submit-order-btn" onclick="placeOrder()">COMPLETE ORDER</button>
+        <div id="checkout-form-area">
+            <div class="total-box">Total: <span id="final-total">0</span> EGP</div>
+            <div class="delivery-note" id="delivery-info">Select a city for delivery price</div>
+
+            <input type="text" id="c-name" placeholder="Full Name">
+            <input type="tel" id="c-phone" placeholder="Phone (01xxxxxxxxx)">
+            
+            <select id="c-city" onchange="toggleMetroOptions(); updateTotal()">
+                <option value="" disabled selected>Select Delivery Location</option>
+                <option value="Cairo">Cairo</option>
+                <option value="Giza">Giza</option>
+                <option value="Helwan">Helwan</option>
+                <option value="Kerdasa">Kerdasa</option>
+                <option value="Al Saf">Al Saf</option>
+                <option value="Al Ayat">Al Ayat</option>
+                <option value="Damietta">Damietta</option>
+                <option value="Gharbia">Gharbia</option>
+                <option value="Beheira">Beheira</option>
+                <option value="Dakahlia">Dakahlia</option>
+                <option value="Qalyubia">Qalyubia</option>
+                <option value="Sharqia">Sharqia</option>
+                <option value="Alexandria">Alexandria</option>
+                <option value="Kafr El Sheikh">Kafr El Sheikh</option>
+                <option value="Monufia">Monufia</option>
+                <option value="Fayum">Fayum</option>
+                <option value="Beni Suef">Beni Suef</option>
+                <option value="Minya">Minya</option>
+                <option value="Assiut">Assiut</option>
+                <option value="Sohag">Sohag</option>
+                <option value="Qena">Qena</option>
+                <option value="Luxor">Luxor</option>
+                <option value="Al Wadi Al Gadid">Al Wadi Al Gadid</option>
+                <option value="North & South Sinai">North & South Sinai</option>
+                <option value="Metro">Metro (Line 1 Station)</option>
+            </select>
+
+            <select id="metro-stations" style="display: none;" onchange="updateTotal()">
+                <option value="" disabled selected>Select Line 1 Station</option>
+                <option value="Helwan">Helwan</option>
+                <option value="Ain Helwan">Ain Helwan</option>
+                <option value="Helwan University">Helwan University</option>
+                <option value="Wadi Hof">Wadi Hof</option>
+                <option value="Hadayek Helwan">Hadayek Helwan</option>
+                <option value="El-Maasara">El-Maasara</option>
+                <option value="Tora El-Asmant">Tora El-Asmant</option>
+                <option value="Kozzika">Kozzika</option>
+                <option value="Tora El-Balad">Tora El-Balad</option>
+                <option value="Sakanat El-Maadi">Sakanat El-Maadi</option>
+                <option value="Maadi">Maadi</option>
+                <option value="Hadayek El-Maadi">Hadayek El-Maadi</option>
+                <option value="Dar El-Salam">Dar El-Salam</option>
+                <option value="El-Zahraa">El-Zahraa</option>
+                <option value="Mar Girgis">Mar Girgis</option>
+                <option value="El-Malek El-Saleh">El-Malek El-Saleh</option>
+                <option value="Al-Sayeda Zeinab">Al-Sayeda Zeinab</option>
+                <option value="Saad Zaghloul">Saad Zaghloul</option>
+                <option value="Sadat">Sadat</option>
+                <option value="Nasser">Nasser</option>
+                <option value="Orabi">Orabi</option>
+                <option value="Al-Shohadaa">Al-Shohadaa (Ramses)</option>
+                <option value="Ghamra">Ghamra</option>
+                <option value="El-Demerdash">El-Demerdash</option>
+                <option value="Manshiet El-Sadr">Manshiet El-Sadr</option>
+                <option value="Kobri El-Qobba">Kobri El-Qobba</option>
+                <option value="Hammamat El-Qobba">Hammamat El-Qobba</option>
+                <option value="Saray El-Qobba">Saray El-Qobba</option>
+                <option value="Hadayek El-Zaitoun">Hadayek El-Zaitoun</option>
+                <option value="Helmet El-Zaitoun">Helmet El-Zaitoun</option>
+                <option value="El-Matareya">El-Matareya</option>
+                <option value="Ain Shams">Ain Shams</option>
+                <option value="Ezbet El-Nakhl">Ezbet El-Nakhl</option>
+                <option value="El-Marg">El-Marg</option>
+                <option value="New El-Marg">New El-Marg</option>
+            </select>
+
+            <input type="text" id="c-addr" placeholder="Detailed Address">
+            
+            <div class="promo-wrap">
+                <input type="text" id="c-promo" placeholder="Promo Code">
+                <button class="apply-btn" onclick="applyPromo()">Apply</button>
+            </div>
+
+            <button class="order-btn" id="submit-order-btn" onclick="placeOrder()">COMPLETE ORDER</button>
+        </div>
     </div>
 
     <div class="footer-wave-container">
@@ -267,11 +276,8 @@
     </div>
 
     <script>
-    // URL for Order Submissions
     const ORDER_URL = "https://script.google.com/macros/s/AKfycbxOZKl6cH1Fh3L_wJ9qX5SbD5Y5cSzpMmt3qRWiR_MJL-gQRNjWSxRDet0Nh4Eok4SXdA/exec";
-    
-    // Paste your Products Handler URL here (the one that returns the product list)
-    const PRODUCTS_URL = "https://script.google.com/macros/s/AKfycbzsc-LQJwIFX_LVhHd2olYG9RJ-1Ln3RSxWXnAntQFBDkgWzApnuoT68uPFE9cK8pc2OQ/exec"; 
+    const PRODUCTS_URL = "https://script.google.com/macros/s/AKfycbxxZBfTrsKRfKkDmQEVhf0_IZuhtlP-rAOWES-6utFieZ5qnc7iwEJd-Ex--IKQDTc1Yw/exec"; 
     
     let cart = JSON.parse(localStorage.getItem('comfy_cart')) || [];
     let activePromoCode = ""; 
@@ -298,15 +304,12 @@
     async function validateCartStock() {
         if (cart.length === 0) return;
         try {
-            // Fetching from the Products Handler URL
             const response = await fetch(PRODUCTS_URL + "?action=getProducts");
             const allProducts = await response.json();
             let itemRemoved = false;
             
             const validCart = cart.filter(cartItem => {
                 const liveProduct = allProducts.find(p => p.Name === cartItem.Name);
-                
-                // Logic to remove items if missing, Hidden/Inactive, or if Visible is False
                 const isHidden = !liveProduct || 
                                  liveProduct.Status === "Hidden" || 
                                  liveProduct.Status === "Inactive" || 
@@ -325,27 +328,39 @@
                 showToast("Some items are no longer available and were removed ⛈️");
                 loadCart();
             }
-        } catch (e) { console.log("Validation check failed. Check PRODUCTS_URL."); }
+        } catch (e) { console.log("Validation check failed."); }
     }
 
     function loadCart() {
         const list = document.getElementById('cart-items');
-        list.innerHTML = cart.length === 0 ? "<p style='text-align:center;'>Bag is empty</p>" : "";
-        document.getElementById('submit-order-btn').disabled = (cart.length === 0);
-        cart.forEach((item, index) => {
-            const isLimitReached = item.MaxStock && item.Qty >= item.MaxStock;
-            list.innerHTML += `<div class="cart-row">
-                <img src="${item.Img}" class="cart-img">
-                <div class="cart-details"><b>${item.Name}</b><br><small>${item.Size}</small></div>
-                <div class="qty-controls">
-                    <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
-                    <span>${item.Qty}</span>
-                    <button class="qty-btn" onclick="changeQty(${index}, 1)" style="${isLimitReached ? 'opacity:0.3; cursor:not-allowed;' : ''}">+</button>
-                </div>
-                <button class="remove-btn" onclick="removeItem(${index})">×</button>
-            </div>`;
-        });
-        updateTotal();
+        const formArea = document.getElementById('checkout-form-area');
+        const emptyState = document.getElementById('empty-state');
+        
+        list.innerHTML = "";
+
+        if (cart.length === 0) {
+            formArea.style.display = "none";
+            emptyState.style.display = "block";
+            list.innerHTML = "<p style='text-align:center; font-weight:bold; color:var(--sky-blue);'>Bag is empty</p>";
+        } else {
+            formArea.style.display = "block";
+            emptyState.style.display = "none";
+            
+            cart.forEach((item, index) => {
+                const isLimitReached = item.MaxStock && item.Qty >= item.MaxStock;
+                list.innerHTML += `<div class="cart-row">
+                    <img src="${item.Img}" class="cart-img">
+                    <div class="cart-details"><b>${item.Name}</b><br><small>${item.Size}</small></div>
+                    <div class="qty-controls">
+                        <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
+                        <span>${item.Qty}</span>
+                        <button class="qty-btn" onclick="changeQty(${index}, 1)" style="${isLimitReached ? 'opacity:0.3; cursor:not-allowed;' : ''}">+</button>
+                    </div>
+                    <button class="remove-btn" onclick="removeItem(${index})">×</button>
+                </div>`;
+            });
+            updateTotal();
+        }
     }
 
     function changeQty(index, n) {
@@ -425,6 +440,7 @@
     }
 
     function updateTotal() {
+        if (cart.length === 0) return;
         let subtotal = 0;
         let totalDiscount = 0;
         const currentCode = activePromoCode.toLowerCase();
