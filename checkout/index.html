@@ -54,7 +54,14 @@
             max-width: 600px; margin: 40px auto; 
             background: #ffffff; border-radius: 40px; 
             padding: 40px; box-shadow: 0 25px 50px rgba(0,0,0,0.08);
+            position: relative;
         }
+        /* Lockout Overlay */
+        .processing-lock {
+            pointer-events: none !important;
+            opacity: 0.7;
+        }
+
         .back-link {
             text-decoration: none; color: var(--sky-blue);
             font-weight: 700; font-size: 0.9rem; display: inline-block; margin-bottom: 20px;
@@ -144,7 +151,7 @@
 
     <div id="toast-container"></div>
 
-    <div class="checkout-container">
+    <div class="checkout-container" id="main-checkout-area">
         <a href="../main/" class="back-link" id="back-to-shop">← Back to Products</a>
         <h2>Your Bag ⛈️</h2>
         
@@ -152,7 +159,7 @@
 
         <div id="checkout-form-wrapper">
             <div class="total-box">Total: <span id="final-total">0</span> EGP</div>
-            <div class="delivery-note" id="delivery-info">Select a city for delivery price</div>
+            <div id="delivery-info" class="delivery-note">Select a city for delivery price</div>
 
             <input type="text" id="c-name" placeholder="Full Name">
             <input type="tel" id="c-phone" placeholder="Phone (01xxxxxxxxx)">
@@ -378,22 +385,25 @@
         
         cart.forEach((item, index) => {
             const isLimitReached = item.MaxStock && item.Qty >= item.MaxStock;
+            // CRITICAL: We check isProcessingOrder here. If true, we disable these buttons inside the HTML string.
+            const isDisabledStr = isProcessingOrder ? 'disabled' : '';
+            
             list.innerHTML += `<div class="cart-row">
                 <img src="${item.Img}" class="cart-img">
                 <div class="cart-details"><b>${item.Name}</b><br><small>${item.Size}</small></div>
                 <div class="qty-controls">
-                    <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
+                    <button class="qty-btn" ${isDisabledStr} onclick="changeQty(${index}, -1)">-</button>
                     <span>${item.Qty}</span>
-                    <button class="qty-btn" onclick="changeQty(${index}, 1)" style="${isLimitReached ? 'opacity:0.3; cursor:not-allowed;' : ''}">+</button>
+                    <button class="qty-btn" ${isDisabledStr} onclick="changeQty(${index}, 1)" style="${isLimitReached ? 'opacity:0.3; cursor:not-allowed;' : ''}">+</button>
                 </div>
-                <button class="remove-btn" onclick="removeItem(${index})">×</button>
+                <button class="remove-btn" ${isDisabledStr} onclick="removeItem(${index})">×</button>
             </div>`;
         });
         updateTotal();
     }
 
     function changeQty(index, n) {
-        if (isProcessingOrder) return; // IGNORE CLICKS IF PROCESSING
+        if (isProcessingOrder) return;
         const item = cart[index];
         if (n === 1 && item.MaxStock && item.Qty >= item.MaxStock) {
             showToast(`Only ${item.MaxStock} available! ☁️`);
@@ -407,7 +417,7 @@
     }
 
     function removeItem(index) {
-        if (isProcessingOrder) return; // IGNORE CLICKS IF PROCESSING
+        if (isProcessingOrder) return;
         cart.splice(index, 1);
         saveAndReload();
     }
@@ -418,7 +428,7 @@
     }
 
     function applyPromo() {
-        if (isProcessingOrder) return; // IGNORE CLICKS IF PROCESSING
+        if (isProcessingOrder) return;
         const inputCode = document.getElementById('c-promo').value.trim().toLowerCase();
         if (!inputCode) {
             activePromoCode = "";
@@ -459,7 +469,6 @@
     }
 
     function toggleMetroOptions() {
-        if (isProcessingOrder) return;
         const city = document.getElementById('c-city').value;
         const metroSelect = document.getElementById('metro-stations');
         const addrInput = document.getElementById('c-addr');
@@ -526,8 +535,27 @@
         document.getElementById('final-total').innerText = Math.round(finalVal);
     }
 
+    function setLockout(state) {
+        isProcessingOrder = state;
+        const area = document.getElementById('main-checkout-area');
+        
+        if (state) {
+            area.classList.add('processing-lock');
+            document.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
+            document.getElementById('back-to-shop').style.pointerEvents = "none";
+            document.getElementById('back-to-shop').style.opacity = "0.5";
+        } else {
+            area.classList.remove('processing-lock');
+            document.querySelectorAll('input, select, button').forEach(el => el.disabled = false);
+            document.getElementById('back-to-shop').style.pointerEvents = "auto";
+            document.getElementById('back-to-shop').style.opacity = "1";
+        }
+        // Force refresh cart UI to apply button disable state
+        loadCart();
+    }
+
     async function placeOrder() {
-        if (isProcessingOrder) return; // Prevent double trigger
+        if (isProcessingOrder) return;
 
         const name = document.getElementById('c-name').value.trim();
         const phone = document.getElementById('c-phone').value.trim();
@@ -542,24 +570,12 @@
         if (city === "Metro" && !metroStation) { showToast("Select a Metro station"); return; }
         if (city !== "Metro" && (!city || addr.length < 5)) { showToast("Check address"); return; }
 
-        // --- LOCKOUT START ---
-        isProcessingOrder = true; // ACTIVATING THE MASTER LOCK
-        btn.disabled = true;
+        setLockout(true);
         btn.innerText = "VERIFYING BAG...";
-        
-        // Physically disable all interactive UI elements
-        document.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
-        document.getElementById('back-to-shop').style.pointerEvents = "none";
-        document.getElementById('back-to-shop').style.opacity = "0.5";
-        // --- LOCKOUT END ---
 
         const isBagValid = await validateCartStock();
         if (!isBagValid) {
-            // Re-enable if validation fails
-            isProcessingOrder = false; 
-            document.querySelectorAll('input, select, button').forEach(el => el.disabled = false);
-            document.getElementById('back-to-shop').style.pointerEvents = "auto";
-            document.getElementById('back-to-shop').style.opacity = "1";
+            setLockout(false);
             btn.innerText = "COMPLETE ORDER";
             return; 
         }
@@ -582,10 +598,7 @@
             window.location.href = "../thank-you/";
         } catch (e) {
             showToast("Network error. Try again.");
-            isProcessingOrder = false;
-            document.querySelectorAll('input, select, button').forEach(el => el.disabled = false);
-            document.getElementById('back-to-shop').style.pointerEvents = "auto";
-            document.getElementById('back-to-shop').style.opacity = "1";
+            setLockout(false);
             btn.innerText = "COMPLETE ORDER";
         }
     }
