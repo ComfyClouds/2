@@ -145,7 +145,7 @@
     <div id="toast-container"></div>
 
     <div class="checkout-container">
-        <a href="../main/" class="back-link">← Back to Products</a>
+        <a href="../main/" class="back-link" id="back-to-shop">← Back to Products</a>
         <h2>Your Bag ⛈️</h2>
         
         <div id="cart-items"></div>
@@ -301,6 +301,7 @@
     let cart = JSON.parse(localStorage.getItem('comfy_cart')) || [];
     let activePromoCode = ""; 
     let isFreeShippingCode = false;
+    let isProcessingOrder = false; // THE MASTER LOCK
 
     window.onscroll = function() {
         const btn = document.getElementById('backToTop');
@@ -392,6 +393,7 @@
     }
 
     function changeQty(index, n) {
+        if (isProcessingOrder) return; // IGNORE CLICKS IF PROCESSING
         const item = cart[index];
         if (n === 1 && item.MaxStock && item.Qty >= item.MaxStock) {
             showToast(`Only ${item.MaxStock} available! ☁️`);
@@ -405,6 +407,7 @@
     }
 
     function removeItem(index) {
+        if (isProcessingOrder) return; // IGNORE CLICKS IF PROCESSING
         cart.splice(index, 1);
         saveAndReload();
     }
@@ -415,6 +418,7 @@
     }
 
     function applyPromo() {
+        if (isProcessingOrder) return; // IGNORE CLICKS IF PROCESSING
         const inputCode = document.getElementById('c-promo').value.trim().toLowerCase();
         if (!inputCode) {
             activePromoCode = "";
@@ -455,6 +459,7 @@
     }
 
     function toggleMetroOptions() {
+        if (isProcessingOrder) return;
         const city = document.getElementById('c-city').value;
         const metroSelect = document.getElementById('metro-stations');
         const addrInput = document.getElementById('c-addr');
@@ -522,6 +527,8 @@
     }
 
     async function placeOrder() {
+        if (isProcessingOrder) return; // Prevent double trigger
+
         const name = document.getElementById('c-name').value.trim();
         const phone = document.getElementById('c-phone').value.trim();
         const city = document.getElementById('c-city').value;
@@ -536,21 +543,23 @@
         if (city !== "Metro" && (!city || addr.length < 5)) { showToast("Check address"); return; }
 
         // --- LOCKOUT START ---
+        isProcessingOrder = true; // ACTIVATING THE MASTER LOCK
         btn.disabled = true;
         btn.innerText = "VERIFYING BAG...";
         
-        // Disable inputs to prevent changes during submission
-        document.querySelectorAll('input, select, .qty-btn, .remove-btn, .apply-btn').forEach(el => {
-            el.disabled = true;
-        });
+        // Physically disable all interactive UI elements
+        document.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
+        document.getElementById('back-to-shop').style.pointerEvents = "none";
+        document.getElementById('back-to-shop').style.opacity = "0.5";
         // --- LOCKOUT END ---
 
         const isBagValid = await validateCartStock();
         if (!isBagValid) {
-            // Re-enable inputs if validation fails so user can fix their cart
-            document.querySelectorAll('input, select, .qty-btn, .remove-btn, .apply-btn').forEach(el => {
-                el.disabled = false;
-            });
+            // Re-enable if validation fails
+            isProcessingOrder = false; 
+            document.querySelectorAll('input, select, button').forEach(el => el.disabled = false);
+            document.getElementById('back-to-shop').style.pointerEvents = "auto";
+            document.getElementById('back-to-shop').style.opacity = "1";
             btn.innerText = "COMPLETE ORDER";
             return; 
         }
@@ -573,10 +582,10 @@
             window.location.href = "../thank-you/";
         } catch (e) {
             showToast("Network error. Try again.");
-            // Re-enable inputs on error
-            document.querySelectorAll('input, select, .qty-btn, .remove-btn, .apply-btn').forEach(el => {
-                el.disabled = false;
-            });
+            isProcessingOrder = false;
+            document.querySelectorAll('input, select, button').forEach(el => el.disabled = false);
+            document.getElementById('back-to-shop').style.pointerEvents = "auto";
+            document.getElementById('back-to-shop').style.opacity = "1";
             btn.innerText = "COMPLETE ORDER";
         }
     }
