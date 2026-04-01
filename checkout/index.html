@@ -319,9 +319,12 @@
             const response = await fetch(PRODUCTS_URL + "?action=getProducts");
             const allProducts = await response.json();
             let itemRemoved = false;
+            let priceChanged = false;
             
             const validCart = cart.filter(cartItem => {
                 const liveProduct = allProducts.find(p => p.Name === cartItem.Name);
+                
+                // Check if item is hidden/inactive
                 const isHidden = !liveProduct || 
                                  liveProduct.Status === "Hidden" || 
                                  liveProduct.Status === "Inactive" || 
@@ -331,20 +334,37 @@
                     itemRemoved = true;
                     return false;
                 }
+
+                // CHECK FOR PRICE CHANGES HERE
+                const livePrice = parseFloat(liveProduct.Price);
+                const cartPrice = parseFloat(cartItem.Price);
+
+                if (livePrice !== cartPrice) {
+                    cartItem.Price = livePrice; // Update price in the cart object
+                    priceChanged = true;
+                }
+
                 return true;
             });
 
-            if (itemRemoved) {
+            if (itemRemoved || priceChanged) {
                 cart = validCart;
                 localStorage.setItem('comfy_cart', JSON.stringify(cart));
-                showToast("Some items are no longer available ⛈️");
-                loadCart();
-                return false;
+                
+                if (itemRemoved) {
+                    showToast("Some items are no longer available ⛈️");
+                }
+                if (priceChanged) {
+                    showToast("Prices have been updated to latest rates ✨");
+                }
+                
+                loadCart(); // Reload UI to show new prices and updated total
+                return false; // Stop the order submission
             }
             return true;
         } catch (e) { 
             console.log("Validation check failed."); 
-            return true; // Proceed if network fails to check stock
+            return true; 
         }
     }
 
@@ -524,8 +544,8 @@
         btn.disabled = true;
         btn.innerText = "VERIFYING BAG...";
 
-        const isStockValid = await validateCartStock();
-        if (!isStockValid) {
+        const isBagValid = await validateCartStock();
+        if (!isBagValid) {
             btn.disabled = false;
             btn.innerText = "COMPLETE ORDER";
             return; 
@@ -555,8 +575,6 @@
     }
 
     loadCart();
-    // Initial stock check removed here to prevent double-lag on page load; 
-    // it runs instantly upon "Complete Order" click.
     </script>
 </body>
 </html>
