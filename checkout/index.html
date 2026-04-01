@@ -72,7 +72,10 @@
         .cart-details { flex: 1; font-size: 0.9rem; }
         .qty-controls { display: flex; align-items: center; gap: 10px; background: #f1f1f1; padding: 5px 10px; border-radius: 50px; }
         .qty-btn { background: none; border: none; font-weight: 800; cursor: pointer; color: var(--sky-blue); }
+        .qty-btn:disabled { opacity: 0.3; cursor: not-allowed; }
         .remove-btn { background: none; border: none; color: #ccc; font-size: 1.2rem; cursor: pointer; }
+        .remove-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        
         .total-box {
             background: #f9f9ff; padding: 20px; border-radius: 20px;
             text-align: center; font-size: 1.4rem; font-weight: 800;
@@ -80,9 +83,13 @@
         }
         .delivery-note { font-size: 0.8rem; color: #888; margin-bottom: 15px; text-align: center; }
         input, select { width: 100%; padding: 15px; margin-bottom: 15px; border: 2px solid #f0f0f0; border-radius: 18px; font-size: 1rem; }
+        input:disabled, select:disabled { background-color: #fcfcfc; color: #aaa; }
+
         .promo-wrap { display: flex; gap: 10px; margin-bottom: 20px; }
         .promo-wrap input { margin-bottom: 0; }
         .apply-btn { background: #444; color: white; border: none; padding: 0 25px; border-radius: 18px; cursor: pointer; font-weight: 700; }
+        .apply-btn:disabled { background: #999; cursor: not-allowed; }
+
         .order-btn { 
             width: 100%; padding: 22px; border: none; border-radius: 50px; 
             background: var(--sky-blue); color: white; font-weight: 800; 
@@ -222,7 +229,7 @@
             
             <div class="promo-wrap">
                 <input type="text" id="c-promo" placeholder="Promo Code">
-                <button class="apply-btn" onclick="applyPromo()">Apply</button>
+                <button class="apply-btn" id="promo-apply-btn" onclick="applyPromo()">Apply</button>
             </div>
 
             <button class="order-btn" id="submit-order-btn" onclick="placeOrder()">COMPLETE ORDER</button>
@@ -323,8 +330,6 @@
             
             const validCart = cart.filter(cartItem => {
                 const liveProduct = allProducts.find(p => p.Name === cartItem.Name);
-                
-                // Check if item is hidden/inactive
                 const isHidden = !liveProduct || 
                                  liveProduct.Status === "Hidden" || 
                                  liveProduct.Status === "Inactive" || 
@@ -335,37 +340,26 @@
                     return false;
                 }
 
-                // CHECK FOR PRICE CHANGES HERE
                 const livePrice = parseFloat(liveProduct.Price);
                 const cartPrice = parseFloat(cartItem.Price);
 
                 if (livePrice !== cartPrice) {
-                    cartItem.Price = livePrice; // Update price in the cart object
+                    cartItem.Price = livePrice;
                     priceChanged = true;
                 }
-
                 return true;
             });
 
             if (itemRemoved || priceChanged) {
                 cart = validCart;
                 localStorage.setItem('comfy_cart', JSON.stringify(cart));
-                
-                if (itemRemoved) {
-                    showToast("Some items are no longer available ⛈️");
-                }
-                if (priceChanged) {
-                    showToast("Prices have been updated to latest rates ✨");
-                }
-                
-                loadCart(); // Reload UI to show new prices and updated total
-                return false; // Stop the order submission
+                if (itemRemoved) showToast("Some items are no longer available ⛈️");
+                if (priceChanged) showToast("Prices have been updated to latest rates ✨");
+                loadCart();
+                return false;
             }
             return true;
-        } catch (e) { 
-            console.log("Validation check failed."); 
-            return true; 
-        }
+        } catch (e) { return true; }
     }
 
     function loadCart() {
@@ -541,12 +535,22 @@
         if (city === "Metro" && !metroStation) { showToast("Select a Metro station"); return; }
         if (city !== "Metro" && (!city || addr.length < 5)) { showToast("Check address"); return; }
 
+        // --- LOCKOUT START ---
         btn.disabled = true;
         btn.innerText = "VERIFYING BAG...";
+        
+        // Disable inputs to prevent changes during submission
+        document.querySelectorAll('input, select, .qty-btn, .remove-btn, .apply-btn').forEach(el => {
+            el.disabled = true;
+        });
+        // --- LOCKOUT END ---
 
         const isBagValid = await validateCartStock();
         if (!isBagValid) {
-            btn.disabled = false;
+            // Re-enable inputs if validation fails so user can fix their cart
+            document.querySelectorAll('input, select, .qty-btn, .remove-btn, .apply-btn').forEach(el => {
+                el.disabled = false;
+            });
             btn.innerText = "COMPLETE ORDER";
             return; 
         }
@@ -569,7 +573,10 @@
             window.location.href = "../thank-you/";
         } catch (e) {
             showToast("Network error. Try again.");
-            btn.disabled = false;
+            // Re-enable inputs on error
+            document.querySelectorAll('input, select, .qty-btn, .remove-btn, .apply-btn').forEach(el => {
+                el.disabled = false;
+            });
             btn.innerText = "COMPLETE ORDER";
         }
     }
